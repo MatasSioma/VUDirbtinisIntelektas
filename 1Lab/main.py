@@ -31,3 +31,17 @@ print(" ".join(f"({str(x).replace('.', ',')}; {str(y).replace('.', ',')})" for x
 print("\nKlase 1")
 print(f"Ilgis: {len(class_1)}")
 print(" ".join(f"({str(x).replace('.', ',')}; {str(y).replace('.', ',')})" for x, y in class_1))
+
+def slenkstis(a):
+    return 1 if a >= 0 else 0
+
+def sigmoid(a):
+    return round(1.0 / (1.0 + np.exp(-a)))
+
+def neuronas(x1, x2, w1, w2, b, fx):
+    a = x1 * w1 + x2 * w2 + b
+    return fx(a)
+
+if __name__ == "__main__":
+    AK_FUNK = sigmoid
+    print(neuronas(0.2, 0.2, 0.2, -1.6, 0.2, AK_FUNK))
