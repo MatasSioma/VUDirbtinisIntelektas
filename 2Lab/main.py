@@ -376,10 +376,18 @@ def testuoti(X_test, y_test, w, b):
         klases_spejamos.append(round(y_i))
     return mse, acc, klases_spejamos
 
+def issaugoti_testavimo_csv(y_test, klases_spejamos, failo_vardas):
+    """Issaugo testavimo klasifikacijos rezultatus i CSV faila."""
+    kelias = os.path.join(REZULTATAI, failo_vardas)
+    with open(kelias, 'w', encoding='utf-8-sig') as f:
+        f.write("Nr;Spejama klase;Tikroji klase;Teisingai\n")
+        for i in range(len(y_test)):
+            teisinga = "Taip" if klases_spejamos[i] == int(y_test[i]) else "Ne"
+            f.write(f"{i+1};{klases_spejamos[i]};{int(y_test[i])};{teisinga}\n")
 
 # CHATGPT
 def spausdinti_rezultatus(pavadinimas, w, b, train_mse, val_mse, train_acc, val_acc,
-                          test_mse, test_acc, klases_spejamos, y_test, laikas):
+                          test_mse, test_acc, laikas):
     """Isvedame visus rezultatus i konsole."""
     print(f"\n{'='*60}")
     print(f"  {pavadinimas}")
@@ -403,12 +411,7 @@ def spausdinti_rezultatus(pavadinimas, w, b, train_mse, val_mse, train_acc, val_
     print(f"  Paklaida: {test_mse:.6f}")
     print(f"  Tikslumas: {test_acc:.4f} ({test_acc*100:.2f}%)")
 
-    print(f"\nTestavimo duomenu klasifikacija:")
-    print(f"  {'Nr.':<5} {'Spejama':<10} {'Tikroji':<10} {'Teisingai?'}")
-    print(f"  {'-'*40}")
-    for i in range(len(y_test)):
-        teisinga = 'Taip' if klases_spejamos[i] == int(y_test[i]) else 'Ne'
-        print(f"  {i+1:<5} {klases_spejamos[i]:<10} {int(y_test[i]):<10} {teisinga}")
+    print(f"\n  Testavimo klasifikacija issaugota i CSV faila.")
 # ---
 
 # PALEIDIMAS
@@ -440,40 +443,23 @@ if __name__ == "__main__":
 
     # --- Hiperparametrai ---
     MAX_EPOCHOS = 150
-    ETA = 0.75       # Pagrindinis mokymosi greitis
-    E_MIN = 0.01    # Minimali paklaida sustojimui
+    ETA_BGD = 5       # Optimalus mokymosi greitis paketiniam
+    ETA_SGD = 0.01     # Optimalus mokymosi greitis stochastiniam
+    E_MIN = 0.01      # Minimali paklaida sustojimui
 
-    # A) Stochastinis gradientinis nusileidimas
-    print("\n--- Stochastinis mokymas ---")
-    start = time.time()
-    sgd_w, sgd_b, sgd_train_mse, sgd_val_mse, sgd_train_acc, sgd_val_acc = \
-        stochastinis(X_train, y_train, X_val, y_val, ETA, MAX_EPOCHOS, E_MIN, w_pradz, b_pradz)
-    sgd_laikas = time.time() - start
-
-    sgd_test_mse, sgd_test_acc, sgd_test_klases = testuoti(X_test, y_test, sgd_w, sgd_b)
-    spausdinti_rezultatus("STOCHASTINIS GRADIENTINIS NUSILEIDIMAS",
-                          sgd_w, sgd_b, sgd_train_mse, sgd_val_mse,
-                          sgd_train_acc, sgd_val_acc,
-                          sgd_test_mse, sgd_test_acc, sgd_test_klases, y_test, sgd_laikas)
-
-    # Grafikai
-    paklaidu_grafikas(sgd_train_mse, sgd_val_mse,
-        'Stochastinis gradientinis nusileidimas: paklaida nuo epochos', 'sgd_paklaida.png')
-    tikslumo_grafikas(sgd_train_acc, sgd_val_acc,
-        'Stochastinis gradientinis nusileidimas: tikslumas nuo epochos', 'sgd_tikslumas.png')
-
-    # B) Paketinis gradientinis nusileidimas
+    # A) Paketinis gradientinis nusileidimas
     print("\n--- Paketinis mokymas ---")
     start = time.time()
     bgd_w, bgd_b, bgd_train_mse, bgd_val_mse, bgd_train_acc, bgd_val_acc = \
-        paketinis(X_train, y_train, X_val, y_val, ETA, MAX_EPOCHOS, E_MIN, w_pradz, b_pradz)
+        paketinis(X_train, y_train, X_val, y_val, ETA_BGD, MAX_EPOCHOS, E_MIN, w_pradz, b_pradz)
     bgd_laikas = time.time() - start
 
     bgd_test_mse, bgd_test_acc, bgd_test_klases = testuoti(X_test, y_test, bgd_w, bgd_b)
     spausdinti_rezultatus("PAKETINIS GRADIENTINIS NUSILEIDIMAS",
                           bgd_w, bgd_b, bgd_train_mse, bgd_val_mse,
                           bgd_train_acc, bgd_val_acc,
-                          bgd_test_mse, bgd_test_acc, bgd_test_klases, y_test, bgd_laikas)
+                          bgd_test_mse, bgd_test_acc, bgd_laikas)
+    issaugoti_testavimo_csv(y_test, bgd_test_klases, 'bgd_testavimas.csv')
 
     # Grafikai
     paklaidu_grafikas(bgd_train_mse, bgd_val_mse,
@@ -481,31 +467,37 @@ if __name__ == "__main__":
     tikslumo_grafikas(bgd_train_acc, bgd_val_acc,
         'Paketinis gradientinis nusileidimas: tikslumas nuo epochos', 'bgd_tikslumas.png')
 
-    # C) Mokymosi greicio tyrimas (3 skirtingos reiksmes)
+    # B) Stochastinis gradientinis nusileidimas
+    print("\n--- Stochastinis mokymas ---")
+    start = time.time()
+    sgd_w, sgd_b, sgd_train_mse, sgd_val_mse, sgd_train_acc, sgd_val_acc = \
+        stochastinis(X_train, y_train, X_val, y_val, ETA_SGD, MAX_EPOCHOS, E_MIN, w_pradz, b_pradz)
+    sgd_laikas = time.time() - start
+
+    sgd_test_mse, sgd_test_acc, sgd_test_klases = testuoti(X_test, y_test, sgd_w, sgd_b)
+    spausdinti_rezultatus("STOCHASTINIS GRADIENTINIS NUSILEIDIMAS",
+                          sgd_w, sgd_b, sgd_train_mse, sgd_val_mse,
+                          sgd_train_acc, sgd_val_acc,
+                          sgd_test_mse, sgd_test_acc, sgd_laikas)
+    issaugoti_testavimo_csv(y_test, sgd_test_klases, 'sgd_testavimas.csv')
+
+    # Grafikai
+    paklaidu_grafikas(sgd_train_mse, sgd_val_mse,
+        'Stochastinis gradientinis nusileidimas: paklaida nuo epochos', 'sgd_paklaida.png')
+    tikslumo_grafikas(sgd_train_acc, sgd_val_acc,
+        'Stochastinis gradientinis nusileidimas: tikslumas nuo epochos', 'sgd_tikslumas.png')
+
+    # C) Mokymosi greicio tyrimas (skirtingos reiksmes kiekvienam metodui)
     print(f"\n\n{'='*60}")
     print("  MOKYMOSI GREICIO TYRIMAS")
     print('='*60)
 
-    lr_values = [ 0.5, 1, 2.5, 5, 10]
-    sgd_lr_rezultatai = []
+    # Paketinis - skirtingi lr
+    bgd_lr_values = [0.5, 1, 2.5, 5, 10]  # Optimalus: 5
     bgd_lr_rezultatai = []
-
-    for lr in lr_values:
+    print("\n  Paketinis gradientinis nusileidimas:")
+    for lr in bgd_lr_values:
         print(f"\n--- η = {lr} ---")
-
-        # Stochastinis su skirtigu lr
-        _, _, s_train_mse, s_val_mse, s_train_acc, s_val_acc = \
-            stochastinis(X_train, y_train, X_val, y_val, lr, MAX_EPOCHOS, E_MIN, w_pradz, b_pradz)
-        sgd_lr_rezultatai.append({
-            'lr': lr,
-            'val_acc': s_val_acc[-1],
-            'val_mse': s_val_mse[-1],
-            'train_acc': s_train_acc[-1],
-            'train_mse': s_train_mse[-1]
-        })
-        print(f"  SGD: val_acc={s_val_acc[-1]:.4f}, val_mse={s_val_mse[-1]:.6f}")
-
-        # Paketinis su skirtigu lr
         _, _, b_train_mse, b_val_mse, b_train_acc, b_val_acc = \
             paketinis(X_train, y_train, X_val, y_val, lr, MAX_EPOCHOS, E_MIN, w_pradz, b_pradz)
         bgd_lr_rezultatai.append({
@@ -516,6 +508,23 @@ if __name__ == "__main__":
             'train_mse': b_train_mse[-1]
         })
         print(f"  BGD: val_acc={b_val_acc[-1]:.4f}, val_mse={b_val_mse[-1]:.6f}")
+
+    # Stochastinis - skirtingi lr
+    sgd_lr_values = [0.005, 0.01, 0.1, 0.05, 0.5]  # Optimalus: 0.5
+    sgd_lr_rezultatai = []
+    print("\n  Stochastinis gradientinis nusileidimas:")
+    for lr in sgd_lr_values:
+        print(f"\n--- η = {lr} ---")
+        _, _, s_train_mse, s_val_mse, s_train_acc, s_val_acc = \
+            stochastinis(X_train, y_train, X_val, y_val, lr, MAX_EPOCHOS, E_MIN, w_pradz, b_pradz)
+        sgd_lr_rezultatai.append({
+            'lr': lr,
+            'val_acc': s_val_acc[-1],
+            'val_mse': s_val_mse[-1],
+            'train_acc': s_train_acc[-1],
+            'train_mse': s_train_mse[-1]
+        })
+        print(f"  SGD: val_acc={s_val_acc[-1]:.4f}, val_mse={s_val_mse[-1]:.6f}")
 
     # Grafikai: mokymosi greicio itaka
     lr_palyginimas(sgd_lr_rezultatai, 'Stochastinis', 'sgd_lr_palyginimas.png')
