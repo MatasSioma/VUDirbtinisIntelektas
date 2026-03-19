@@ -89,7 +89,8 @@ def print_tieses(weights):
     for i, (w1, w2, b) in enumerate(weights):
         # Tiesė: w1*x1 + w2*x2 + b = 0  =>  x2 = -(w1*x1 + b) / w2
         x2_vals = -(w1 * x1_vals + b) / w2 # tieses y reiksmes
-        plt.plot(x1_vals, x2_vals, color=spalvos[i],
+        mask = (x2_vals >= PLOT_X2LIM[0]) & (x2_vals <= PLOT_X2LIM[1])
+        plt.plot(x1_vals[mask], x2_vals[mask], color=spalvos[i],
                  label=f'Tiesė {i+1}: w1={w1:.2f}, w2={w2:.2f}, b={b:.2f}')
 
         x_mid = (PLOT_X1LIM[0] + PLOT_X1LIM[1]) / 2 # tieses vidurio x1 koordinate
@@ -115,5 +116,6 @@ def print_tieses(weights):
     plt.close()
 
 if __name__ == "__main__":
+    print_duomenys()
     weights = find_weights()
     print_tieses(weights)
