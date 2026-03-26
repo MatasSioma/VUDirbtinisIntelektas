@@ -448,7 +448,7 @@ if __name__ == "__main__":
     E_MIN = 0.01      # Minimali paklaida sustojimui
 
     # A) Paketinis gradientinis nusileidimas
-    print("\n--- Paketinis mokymas ---")
+    print("\n-- Paketinis mokymas --")
     start = time.time()
     bgd_w, bgd_b, bgd_train_mse, bgd_val_mse, bgd_train_acc, bgd_val_acc = \
         paketinis(X_train, y_train, X_val, y_val, ETA_BGD, MAX_EPOCHOS, E_MIN, w_pradz, b_pradz)
@@ -468,7 +468,7 @@ if __name__ == "__main__":
         'Paketinis gradientinis nusileidimas: tikslumas nuo epochos', 'bgd_tikslumas.png')
 
     # B) Stochastinis gradientinis nusileidimas
-    print("\n--- Stochastinis mokymas ---")
+    print("\n-- Stochastinis mokymas --")
     start = time.time()
     sgd_w, sgd_b, sgd_train_mse, sgd_val_mse, sgd_train_acc, sgd_val_acc = \
         stochastinis(X_train, y_train, X_val, y_val, ETA_SGD, MAX_EPOCHOS, E_MIN, w_pradz, b_pradz)
@@ -497,7 +497,7 @@ if __name__ == "__main__":
     bgd_lr_rezultatai = []
     print("\n  Paketinis gradientinis nusileidimas:")
     for lr in bgd_lr_values:
-        print(f"\n--- η = {lr} ---")
+        print(f"\n-- η = {lr} --")
         _, _, b_train_mse, b_val_mse, b_train_acc, b_val_acc = \
             paketinis(X_train, y_train, X_val, y_val, lr, MAX_EPOCHOS, E_MIN, w_pradz, b_pradz)
         bgd_lr_rezultatai.append({
@@ -514,7 +514,7 @@ if __name__ == "__main__":
     sgd_lr_rezultatai = []
     print("\n  Stochastinis gradientinis nusileidimas:")
     for lr in sgd_lr_values:
-        print(f"\n--- η = {lr} ---")
+        print(f"\n-- η = {lr} --")
         _, _, s_train_mse, s_val_mse, s_train_acc, s_val_acc = \
             stochastinis(X_train, y_train, X_val, y_val, lr, MAX_EPOCHOS, E_MIN, w_pradz, b_pradz)
         sgd_lr_rezultatai.append({
