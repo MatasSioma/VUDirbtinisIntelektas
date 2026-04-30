@@ -7,9 +7,12 @@ __pycache__/
 *.so
 
 *testavimas.csv
-*.png
+1Lab/*.png
+2Lab/*/*.png
 *.jpg
 *local.json
+rockpaperscissors
+rezultatai-backup
 
 # Distribution / packaging
 .Python

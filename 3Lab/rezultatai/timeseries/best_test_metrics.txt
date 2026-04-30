@@ -1,0 +1,5 @@
+best_model=opt_rmsprop
+test_loss=1.07884
+test_accuracy=0.88000
+train_acc=1.00000
+train_loss=0.00001
