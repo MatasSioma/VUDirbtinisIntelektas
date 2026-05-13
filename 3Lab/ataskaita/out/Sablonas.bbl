@@ -1,0 +1,401 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global}
+    \entry{rps_dataset}{dataset}{}
+      \name{author}{1}{}{%
+        {{hash=a5adae055c35d53e286fbf7536fea2db}{%
+           family={Bruère-Terreault},
+           familyi={B\bibinithyphendelim T\bibinitperiod},
+           given={Julien},
+           giveni={J\bibinitperiod},
+           prefix={de\bibnamedelima la},
+           prefixi={d\bibinitperiod\bibinitdelim l\bibinitperiod}}}%
+      }
+      \strng{namehash}{a5adae055c35d53e286fbf7536fea2db}
+      \strng{fullhash}{a5adae055c35d53e286fbf7536fea2db}
+      \strng{bibnamehash}{a5adae055c35d53e286fbf7536fea2db}
+      \strng{authorbibnamehash}{a5adae055c35d53e286fbf7536fea2db}
+      \strng{authornamehash}{a5adae055c35d53e286fbf7536fea2db}
+      \strng{authorfullhash}{a5adae055c35d53e286fbf7536fea2db}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Rock-Paper-Scissors Images Dataset}
+      \field{urlday}{9}
+      \field{urlmonth}{5}
+      \field{urlyear}{2026}
+      \field{year}{2018}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.kaggle.com/datasets/drgfreeman/rockpaperscissors/data
+      \endverb
+      \verb{url}
+      \verb https://www.kaggle.com/datasets/drgfreeman/rockpaperscissors/data
+      \endverb
+    \endentry
+    \entry{cmu_keystroke}{online}{}
+      \name{author}{2}{}{%
+        {{hash=6dc50a74d04d5e1a7966640ba950c954}{%
+           family={Killourhy},
+           familyi={K\bibinitperiod},
+           given={Kevin\bibnamedelima S.},
+           giveni={K\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=f5cd1a39165affde505b2dd64386252f}{%
+           family={Maxion},
+           familyi={M\bibinitperiod},
+           given={Roy\bibnamedelima A.},
+           giveni={R\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \strng{namehash}{9b03449f8c35bf8c736debc128cf50f5}
+      \strng{fullhash}{9b03449f8c35bf8c736debc128cf50f5}
+      \strng{bibnamehash}{9b03449f8c35bf8c736debc128cf50f5}
+      \strng{authorbibnamehash}{9b03449f8c35bf8c736debc128cf50f5}
+      \strng{authornamehash}{9b03449f8c35bf8c736debc128cf50f5}
+      \strng{authorfullhash}{9b03449f8c35bf8c736debc128cf50f5}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{langid}{english}
+      \field{title}{Keystroke Dynamics Benchmark Data Set (CMU)}
+      \field{urlday}{9}
+      \field{urlmonth}{5}
+      \field{urlyear}{2026}
+      \field{year}{2009}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.cs.cmu.edu/~keystroke/
+      \endverb
+      \verb{url}
+      \verb https://www.cs.cmu.edu/~keystroke/
+      \endverb
+    \endentry
+    \entry{sklearn}{online}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{4}{}{%
+        {{hash=6e96fec0d63277626bb324bd28cdecb7}{%
+           family={Pedregosa},
+           familyi={P\bibinitperiod},
+           given={F.},
+           giveni={F\bibinitperiod}}}%
+        {{hash=b99c2df2144dc5ee09317a7833dea42d}{%
+           family={Varoquaux},
+           familyi={V\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+        {{hash=955f19cea89ae97bb7936078898e6255}{%
+           family={Gramfort},
+           familyi={G\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=2787869c9954c1d4e9891098995feb75}{%
+           family={Michel},
+           familyi={M\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{78c6a4c0199d1956c88b7409d6da2154}
+      \strng{fullhash}{78c6a4c0199d1956c88b7409d6da2154}
+      \strng{bibnamehash}{78c6a4c0199d1956c88b7409d6da2154}
+      \strng{authorbibnamehash}{78c6a4c0199d1956c88b7409d6da2154}
+      \strng{authornamehash}{78c6a4c0199d1956c88b7409d6da2154}
+      \strng{authorfullhash}{78c6a4c0199d1956c88b7409d6da2154}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{langid}{english}
+      \field{title}{scikit-learn: Machine Learning in Python}
+      \field{urlday}{9}
+      \field{urlmonth}{5}
+      \field{urlyear}{2026}
+      \field{year}{2025}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://scikit-learn.org/stable/
+      \endverb
+      \verb{url}
+      \verb https://scikit-learn.org/stable/
+      \endverb
+    \endentry
+    \entry{keras_docs}{online}{}
+      \name{author}{1}{}{%
+        {{hash=7d293ef219b1c0e4182ade1649f375d7}{%
+           family={{Keras Team}},
+           familyi={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{7d293ef219b1c0e4182ade1649f375d7}
+      \strng{fullhash}{7d293ef219b1c0e4182ade1649f375d7}
+      \strng{bibnamehash}{7d293ef219b1c0e4182ade1649f375d7}
+      \strng{authorbibnamehash}{7d293ef219b1c0e4182ade1649f375d7}
+      \strng{authornamehash}{7d293ef219b1c0e4182ade1649f375d7}
+      \strng{authorfullhash}{7d293ef219b1c0e4182ade1649f375d7}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{langid}{english}
+      \field{title}{Keras API documentation}
+      \field{urlday}{9}
+      \field{urlmonth}{5}
+      \field{urlyear}{2026}
+      \field{year}{2025}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://keras.io/api/
+      \endverb
+      \verb{url}
+      \verb https://keras.io/api/
+      \endverb
+    \endentry
+    \entry{kingma2015adam}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=d09e09d2cd56777abc7316017cc5b054}{%
+           family={Kingma},
+           familyi={K\bibinitperiod},
+           given={D.\bibnamedelimi P.},
+           giveni={D\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=269e85c86b7191d8814ace202944f295}{%
+           family={Ba},
+           familyi={B\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{48e9c6f531d6d7d6c5e2921348779df5}
+      \strng{fullhash}{48e9c6f531d6d7d6c5e2921348779df5}
+      \strng{bibnamehash}{48e9c6f531d6d7d6c5e2921348779df5}
+      \strng{authorbibnamehash}{48e9c6f531d6d7d6c5e2921348779df5}
+      \strng{authornamehash}{48e9c6f531d6d7d6c5e2921348779df5}
+      \strng{authorfullhash}{48e9c6f531d6d7d6c5e2921348779df5}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{3rd International Conference on Learning Representations (ICLR)}
+      \field{langid}{english}
+      \field{title}{Adam: A Method for Stochastic Optimization}
+      \field{year}{2015}
+    \endentry
+    \entry{tensorflow}{online}{}
+      \name{author}{1}{}{%
+        {{hash=866166a3cdc99f03926e3677f48e61ba}{%
+           family={{TensorFlow Authors}},
+           familyi={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{866166a3cdc99f03926e3677f48e61ba}
+      \strng{fullhash}{866166a3cdc99f03926e3677f48e61ba}
+      \strng{bibnamehash}{866166a3cdc99f03926e3677f48e61ba}
+      \strng{authorbibnamehash}{866166a3cdc99f03926e3677f48e61ba}
+      \strng{authornamehash}{866166a3cdc99f03926e3677f48e61ba}
+      \strng{authorfullhash}{866166a3cdc99f03926e3677f48e61ba}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{langid}{english}
+      \field{title}{TensorFlow: An end-to-end open source machine learning platform}
+      \field{urlday}{9}
+      \field{urlmonth}{5}
+      \field{urlyear}{2026}
+      \field{year}{2025}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.tensorflow.org/
+      \endverb
+      \verb{url}
+      \verb https://www.tensorflow.org/
+      \endverb
+    \endentry
+    \entry{chatgpt_flatten}{online}{}
+      \name{author}{1}{}{%
+        {{hash=0523b13262b12c215d8009938f5c14f1}{%
+           family={OpenAI},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{fullhash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{bibnamehash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{authorbibnamehash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{authornamehash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{authorfullhash}{0523b13262b12c215d8009938f5c14f1}
+      \field{extraname}{1}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Pokalbio nuoroda nepateikiama (privataus pokalbio archyvas)}
+      \field{title}{ChatGPT pokalbis: Sequential modelio Flatten sluoksnis perėjimui iš Conv2D į Dense}
+      \field{urlday}{30}
+      \field{urlmonth}{4}
+      \field{urlyear}{2026}
+      \field{year}{2025}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://chat.openai.com/
+      \endverb
+      \verb{url}
+      \verb https://chat.openai.com/
+      \endverb
+    \endentry
+    \entry{chatgpt_numpy}{online}{}
+      \name{author}{1}{}{%
+        {{hash=0523b13262b12c215d8009938f5c14f1}{%
+           family={OpenAI},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{fullhash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{bibnamehash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{authorbibnamehash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{authornamehash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{authorfullhash}{0523b13262b12c215d8009938f5c14f1}
+      \field{extraname}{2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Pokalbio nuoroda nepateikiama (privataus pokalbio archyvas)}
+      \field{title}{ChatGPT pokalbis: NumPy keturmačio tensoriaus formavimas iš vaizdų sąrašo}
+      \field{urlday}{30}
+      \field{urlmonth}{4}
+      \field{urlyear}{2026}
+      \field{year}{2025}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://chat.openai.com/
+      \endverb
+      \verb{url}
+      \verb https://chat.openai.com/
+      \endverb
+    \endentry
+    \entry{chatgpt_bendrai}{online}{}
+      \name{author}{1}{}{%
+        {{hash=0523b13262b12c215d8009938f5c14f1}{%
+           family={OpenAI},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{fullhash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{bibnamehash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{authorbibnamehash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{authornamehash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{authorfullhash}{0523b13262b12c215d8009938f5c14f1}
+      \field{extraname}{3}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{langid}{english}
+      \field{title}{ChatGPT}
+      \field{urlday}{9}
+      \field{urlmonth}{5}
+      \field{urlyear}{2026}
+      \field{year}{2025}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://chat.openai.com/
+      \endverb
+      \verb{url}
+      \verb https://chat.openai.com/
+      \endverb
+    \endentry
+    \entry{srivastava2014dropout}{article}{}
+      \name{author}{5}{}{%
+        {{hash=3d78af3d34e4fdd50aa3a9b482c840b3}{%
+           family={Srivastava},
+           familyi={S\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod}}}%
+        {{hash=b4906aab25c4a1182b5e4145c415d68a}{%
+           family={Hinton},
+           familyi={H\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+        {{hash=a98c6ee140cff383b5deb40f1bbadc4a}{%
+           family={Krizhevsky},
+           familyi={K\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=a3cfbe74042f3457db587a42603e1509}{%
+           family={Sutskever},
+           familyi={S\bibinitperiod},
+           given={I.},
+           giveni={I\bibinitperiod}}}%
+        {{hash=ff4643153f1f765d12f548c1fa292974}{%
+           family={Salakhutdinov},
+           familyi={S\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{034e7e9568e4aa8ccefd4e43725c49d1}
+      \strng{fullhash}{034e7e9568e4aa8ccefd4e43725c49d1}
+      \strng{bibnamehash}{034e7e9568e4aa8ccefd4e43725c49d1}
+      \strng{authorbibnamehash}{034e7e9568e4aa8ccefd4e43725c49d1}
+      \strng{authornamehash}{034e7e9568e4aa8ccefd4e43725c49d1}
+      \strng{authorfullhash}{034e7e9568e4aa8ccefd4e43725c49d1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Machine Learning Research}
+      \field{langid}{english}
+      \field{title}{Dropout: A Simple Way to Prevent Neural Networks from Overfitting}
+      \field{volume}{15}
+      \field{year}{2014}
+      \field{pages}{1929\bibrangedash 1958}
+      \range{pages}{30}
+    \endentry
+    \entry{ioffe2015batch}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=ea16b14239418929100a15eb91868330}{%
+           family={Ioffe},
+           familyi={I\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=02825504db1446e3b93f7374eeb35ee2}{%
+           family={Szegedy},
+           familyi={S\bibinitperiod},
+           given={C.},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{e26a274ebec1d60b0aa06c23664cc75b}
+      \strng{fullhash}{e26a274ebec1d60b0aa06c23664cc75b}
+      \strng{bibnamehash}{e26a274ebec1d60b0aa06c23664cc75b}
+      \strng{authorbibnamehash}{e26a274ebec1d60b0aa06c23664cc75b}
+      \strng{authornamehash}{e26a274ebec1d60b0aa06c23664cc75b}
+      \strng{authorfullhash}{e26a274ebec1d60b0aa06c23664cc75b}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the 32nd International Conference on Machine Learning (ICML)}
+      \field{langid}{english}
+      \field{title}{Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift}
+      \field{year}{2015}
+      \field{pages}{448\bibrangedash 456}
+      \range{pages}{9}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

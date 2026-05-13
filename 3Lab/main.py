@@ -1,16 +1,3 @@
-"""
-3 Laboratorinis darbas - Vaizdu klasifikavimas konvoliuciniu neuroniniu tinklu (2D).
-Duomenu rinkinys: Rock-Paper-Scissors (drgfreeman / Kaggle), 2188 PNG, 3 klases.
-
-Vykdoma:
-    python main.py
-
-Rezultatai (mokymo kreives, summary.csv, geriausio modelio testavimo metrikos,
-confusion matrix, ~30 testavimo pavyzdziu su prognozemis) - issaugomi i
-3Lab/rezultatai/images/.
-"""
-from __future__ import annotations
-
 import csv
 import os
 import random
@@ -18,13 +5,12 @@ import sys
 from copy import deepcopy
 from pathlib import Path
 
-# Mazinam TensorFlow trigsma logi prie jam uzkraunant.
 os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
 os.environ.setdefault("TF_ENABLE_ONEDNN_OPTS", "0")
 
 import matplotlib
 
-matplotlib.use("Agg")  # nereikia X displejaus, raso PNG i diska
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 import numpy as np
@@ -33,34 +19,26 @@ from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 from tensorflow.keras import layers, models, optimizers
 
-# -----------------------------------------------------------------------------
-# Konfiguracija (kataloginiai keliai, atsitiktinumo seed)
-# -----------------------------------------------------------------------------
+# Konfiguracija
 SEED = 42
 random.seed(SEED)
 np.random.seed(SEED)
 tf.random.set_seed(SEED)
 
-THIS_DIR = Path(__file__).resolve().parent
-DATA_DIR = THIS_DIR / "rockpaperscissors"
-RESULTS_DIR = THIS_DIR / "rezultatai" / "images"
+CW_DIR = Path(__file__).resolve().parent
+DATA_DIR = CW_DIR / "rockpaperscissors"
+RESULTS_DIR = CW_DIR / "rezultatai" / "images"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
-CLASS_NAMES = ["paper", "rock", "scissors"]  # alfabetine tvarka, kaip ir aplankuose
+CLASS_NAMES = ["paper", "rock", "scissors"] 
 IMG_SIZE = (128, 128)  # H x W - sumazinta is originalo (300x200), kad tilptu i atminti
 NUM_CLASSES = len(CLASS_NAMES)
 SUMMARY_CSV = RESULTS_DIR / "summary.csv"
 
 
-# -----------------------------------------------------------------------------
 # Duomenu paruosimas
-# -----------------------------------------------------------------------------
 def load_images() -> tuple[np.ndarray, np.ndarray, list[str]]:
-    """Iskraunam visus PNG i atminti, normalizuojam i [0,1].
-
-    Grazinam: X (N,H,W,3) float32, y (N,) int, paths (N,) string sarasas
-    (paths reikalingas pavyzdziu vaizdavimui.)
-    """
+    #Iskraunam visus PNG i atminti, normalizuojam i [0,1].
     X, y, paths = [], [], []
     for label_idx, cname in enumerate(CLASS_NAMES):
         cdir = DATA_DIR / cname
@@ -68,38 +46,36 @@ def load_images() -> tuple[np.ndarray, np.ndarray, list[str]]:
         for fp in files:
             img = tf.keras.utils.load_img(str(fp), target_size=IMG_SIZE)
             arr = tf.keras.utils.img_to_array(img) / 255.0  # float32 [0,1]
+            # nuotraukų pixelių masyvai
             X.append(arr)
+            # klasių masyvas
             y.append(label_idx)
             paths.append(str(fp))
+    # Chat gpt. 3D masyvų masyvas N x (H x W x 3) -> 4D masyvą (N x H x W x 3) (tensorius) 
     X = np.asarray(X, dtype=np.float32)
     y = np.asarray(y, dtype=np.int64)
     return X, y, paths
 
 
 def make_splits(X: np.ndarray, y: np.ndarray, paths: list[str]):
-    """80/10/10 stratifikuotas suskirstymas - viena pastovi atsitiktinumo seed.
-
-    Pastaba: PDF 1 punktas reikalauja apjungti is anksto suskirstytus duomenis ir
-    perskirstyti is naujo. Ciaduomenu rinkinys jau yra vientisas (be train/val/test
-    aplanku), todel tiesiog vykdom viena 80:10:10 stratifikuota suskirstyma.
-    """
+    #80/10/10 paskirstymas.
     paths = np.asarray(paths)
-    # 80 train / 20 likes
+    # 80% mokymui / 20% like įrašai
     X_tr, X_rest, y_tr, y_rest, p_tr, p_rest = train_test_split(
         X, y, paths, test_size=0.20, stratify=y, random_state=SEED
     )
-    # is likusio 20% padalinam per puse -> 10 val / 10 test
+    # is likusio 20% padalinam per puse -> 10% validacijos / 10% testavimo
     X_va, X_te, y_va, y_te, p_va, p_te = train_test_split(
         X_rest, y_rest, p_rest, test_size=0.50, stratify=y_rest, random_state=SEED
     )
     return (X_tr, y_tr, p_tr), (X_va, y_va, p_va), (X_te, y_te, p_te)
 
+# ============
+# Modelis
+# ============
 
-# -----------------------------------------------------------------------------
-# Modelio konstravimas pagal konfiguracija (laisvas architekturos keitimas)
-# -----------------------------------------------------------------------------
-def _make_activation_layer(name: str):
-    """Grazinam keras sluoksni atitinkanti aktyvacija. LeakyReLU - atskiras layer."""
+def make_activation_layer(name: str):
+    # Pagalbine funkcija del leakyReLU parametro negative_slope
     name = name.lower()
     if name == "leaky_relu":
         return layers.LeakyReLU(negative_slope=0.1)
@@ -107,6 +83,7 @@ def _make_activation_layer(name: str):
 
 
 def _make_optimizer(name: str, lr: float):
+    # Pagalbine funkcija del skirtingu parametru
     name = name.lower()
     if name == "adam":
         return optimizers.Adam(learning_rate=lr)
@@ -120,7 +97,7 @@ def _make_optimizer(name: str, lr: float):
 
 
 def build_model(cfg: dict, input_shape: tuple, num_classes: int) -> tf.keras.Model:
-    """Sukuriam Sequential modeli pagal cfg dictiona.
+    """Sukuriamas 'keras' modelis pagal cfg
 
     cfg pavyzdys:
       {
@@ -132,12 +109,20 @@ def build_model(cfg: dict, input_shape: tuple, num_classes: int) -> tf.keras.Mod
         "optimizer": "adam", "learning_rate": 1e-3,
         "loss": "sparse_categorical_crossentropy",
       }
+
+
+    Input(H, W, 3)
+    → [conv2d → (BN?) → activation → (MaxPool?) → (Dropout?)] × len(blocks)
+    → Flatten
+    → [Dense(units) → (BN?) → activation → (Dropout?)] × len(dense)
+    → Dense(num_classes, softmax)
+    → compile(loss, optimizer, metrics=accuracy)
     """
     model = models.Sequential(name=cfg["name"].replace(".", "_"))
     model.add(layers.Input(shape=input_shape))
 
     for i, blk in enumerate(cfg["blocks"]):
-        # Conv -> (BN) -> aktyvacija -> Pool -> (Dropout)
+        # Conv -> (BN) -> aktyvacija -> Pooling -> (Dropout)
         # use_bias=False kai BN, nes BN turi savo bias.
         use_bias = not blk.get("batch_norm", False)
         model.add(
@@ -151,12 +136,13 @@ def build_model(cfg: dict, input_shape: tuple, num_classes: int) -> tf.keras.Mod
         )
         if blk.get("batch_norm", False):
             model.add(layers.BatchNormalization(name=f"bn_{i}"))
-        model.add(_make_activation_layer(blk["activation"]))
+        model.add(make_activation_layer(blk["activation"]))
         if blk.get("pool", 0):
             model.add(layers.MaxPooling2D(pool_size=blk["pool"], name=f"pool_{i}"))
         if blk.get("dropout", 0.0) > 0.0:
             model.add(layers.Dropout(blk["dropout"], name=f"drop_{i}"))
 
+    #ChatGpt
     model.add(layers.Flatten())
 
     for j, units in enumerate(cfg.get("dense", [])):
@@ -164,7 +150,7 @@ def build_model(cfg: dict, input_shape: tuple, num_classes: int) -> tf.keras.Mod
                                name=f"dense_{j}"))
         if cfg.get("dense_batch_norm", False):
             model.add(layers.BatchNormalization(name=f"dense_bn_{j}"))
-        model.add(_make_activation_layer(cfg.get("dense_activation", "relu")))
+        model.add(make_activation_layer(cfg.get("dense_activation", "relu")))
         if cfg.get("dense_dropout", 0.0) > 0.0:
             model.add(layers.Dropout(cfg["dense_dropout"], name=f"dense_drop_{j}"))
 
