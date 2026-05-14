@@ -2350,28 +2350,15 @@
   <bcf:section number="0">
     <bcf:citekey order="1">rps_dataset</bcf:citekey>
     <bcf:citekey order="2">cmu_keystroke</bcf:citekey>
-    <bcf:citekey order="3">sklearn</bcf:citekey>
-    <bcf:citekey order="4">keras_docs</bcf:citekey>
-    <bcf:citekey order="5">kingma2015adam</bcf:citekey>
-    <bcf:citekey order="6">tensorflow</bcf:citekey>
-    <bcf:citekey order="7">keras_docs</bcf:citekey>
-    <bcf:citekey order="8">sklearn</bcf:citekey>
-    <bcf:citekey order="9">chatgpt_flatten</bcf:citekey>
-    <bcf:citekey order="10">chatgpt_numpy</bcf:citekey>
-    <bcf:citekey order="11">chatgpt_bendrai</bcf:citekey>
-    <bcf:citekey order="12">srivastava2014dropout</bcf:citekey>
-    <bcf:citekey order="13">ioffe2015batch</bcf:citekey>
-    <bcf:citekey order="14">rps_dataset</bcf:citekey>
-    <bcf:citekey order="15">cmu_keystroke</bcf:citekey>
-    <bcf:citekey order="16">sklearn</bcf:citekey>
-    <bcf:citekey order="17">keras_docs</bcf:citekey>
-    <bcf:citekey order="18">kingma2015adam</bcf:citekey>
-    <bcf:citekey order="19">tensorflow</bcf:citekey>
-    <bcf:citekey order="20">chatgpt_flatten</bcf:citekey>
-    <bcf:citekey order="21">chatgpt_numpy</bcf:citekey>
-    <bcf:citekey order="22">chatgpt_bendrai</bcf:citekey>
-    <bcf:citekey order="23">srivastava2014dropout</bcf:citekey>
-    <bcf:citekey order="24">ioffe2015batch</bcf:citekey>
+    <bcf:citekey order="3">keras_docs</bcf:citekey>
+    <bcf:citekey order="4">tensorflow</bcf:citekey>
+    <bcf:citekey order="5">keras_docs</bcf:citekey>
+    <bcf:citekey order="6">sklearn</bcf:citekey>
+    <bcf:citekey order="7">rps_dataset</bcf:citekey>
+    <bcf:citekey order="8">cmu_keystroke</bcf:citekey>
+    <bcf:citekey order="9">keras_docs</bcf:citekey>
+    <bcf:citekey order="10">tensorflow</bcf:citekey>
+    <bcf:citekey order="11">sklearn</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="none">

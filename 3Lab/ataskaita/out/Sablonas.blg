@@ -1,14 +1,14 @@
 [0] Config.pm:307> INFO - This is Biber 2.17
 [0] Config.pm:310> INFO - Logfile is 'out/Sablonas.blg'
-[50] biber:340> INFO - === Thu May 14, 2026, 00:43:07
-[62] Biber.pm:418> INFO - Reading 'out/Sablonas.bcf'
-[99] Biber.pm:972> INFO - Found 11 citekeys in bib section 0
-[108] Biber.pm:4383> INFO - Processing section 0
-[116] Biber.pm:4574> INFO - Looking for bibtex file 'bibliografija.bib' for section 0
-[119] bibtex.pm:1713> INFO - LaTeX decoding ...
-[126] bibtex.pm:1518> INFO - Found BibTeX data source 'bibliografija.bib'
-[179] UCollate.pm:68> INFO - Overriding locale 'lt-LT' defaults 'variable = shifted' with 'variable = non-ignorable'
-[179] UCollate.pm:68> INFO - Overriding locale 'lt-LT' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[179] Biber.pm:4203> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'lt-LT'
-[186] bbl.pm:654> INFO - Writing 'out/Sablonas.bbl' with encoding 'UTF-8'
-[190] bbl.pm:757> INFO - Output to out/Sablonas.bbl
+[51] biber:340> INFO - === Thu May 14, 2026, 03:13:00
+[60] Biber.pm:418> INFO - Reading 'out/Sablonas.bcf'
+[99] Biber.pm:972> INFO - Found 5 citekeys in bib section 0
+[107] Biber.pm:4383> INFO - Processing section 0
+[115] Biber.pm:4574> INFO - Looking for bibtex file 'bibliografija.bib' for section 0
+[116] bibtex.pm:1713> INFO - LaTeX decoding ...
+[121] bibtex.pm:1518> INFO - Found BibTeX data source 'bibliografija.bib'
+[161] UCollate.pm:68> INFO - Overriding locale 'lt-LT' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[161] UCollate.pm:68> INFO - Overriding locale 'lt-LT' defaults 'variable = shifted' with 'variable = non-ignorable'
+[161] Biber.pm:4203> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'lt-LT'
+[165] bbl.pm:654> INFO - Writing 'out/Sablonas.bbl' with encoding 'UTF-8'
+[167] bbl.pm:757> INFO - Output to out/Sablonas.bbl

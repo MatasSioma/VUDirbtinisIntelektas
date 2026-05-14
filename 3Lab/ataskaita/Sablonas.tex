@@ -90,9 +90,9 @@
 
 \subsection{Vaizdų duomenų rinkinys}
 
-Vaizdų klasifikavimo užduočiai pasirinktas  „Akmuo--popierius--žirklės“ duomenų rinkinys iš \textit{Kaggle} platformos~\cite{rps_dataset}. Duomenų rinkinį sudaro spalvotos rankos gestų nuotraukos vienodame žaliame fone, sugrupuotos į tris klases: \texttt{paper} (popierius), \texttt{rock} (akmuo) ir \texttt{scissors} (žirklės). Nuotraukų rezoliucija -- \(300{\times}200\) pikselių, RGB.
+Vaizdų klasifikavimo užduočiai pasirinktas  „Akmuo--popierius--žirklės“ duomenų rinkinys iš \textit{Kaggle} platformos~\cite{rps_dataset}. Duomenų rinkinį sudaro spalvotos rankos gestų nuotraukos vienodame žaliame fone, sugrupuotos į tris klases: \texttt{paper} (popierius), \texttt{rock} (akmuo) ir \texttt{scissors} (žirklės). Nuotraukų rezoliucija --- \(300{\times}200\) pikselių, RGB.
 
-Klasių dažnio pasiskirstymas pateiktas lentelėje~\ref{tab:rps_kiekiai}. Duomenų rinkinyje yra 2188 nuotraukos, klasės subalansuotos (didžiausias skirtumas tarp klasių -- \(\sim 5{,}3~\%\)), todėl papildomas klasių balansavimas netaikomas.
+Klasių dažnio pasiskirstymas pateiktas lentelėje~\ref{tab:rps_kiekiai}. Duomenų rinkinyje yra 2188 nuotraukos, klasės subalansuotos (didžiausias skirtumas tarp klasių --- \(\sim 5{,}3~\%\)), todėl papildomas klasių balansavimas netaikomas.
 
 \begin{table}[H]
     \centering
@@ -117,9 +117,9 @@ Klasių dažnio pasiskirstymas pateiktas lentelėje~\ref{tab:rps_kiekiai}. Duome
 
 Laiko eilučių klasifikavimo eksperimentui naudojama Carnegie Mellon universiteto klavišų paspaudimų dinamikos duomenų aibė~\cite{cmu_keystroke}. Visi dalyviai, 8 atskirų sesijų metu po 50 kartų iš naujo įvedė vienodą fiksuotą slaptažodį \texttt{tie5Roanl}. Duomenyse randami trijų rūšių laikai:
 \begin{itemize}
-    \item \textit{H} (\textit{hold}) -- klavišo paspaudimo trukmė;
-    \item \textit{DD} (\textit{down-down}) -- laikas tarp dviejų gretimų klavišų paspaudimų;
-    \item \textit{UD} (\textit{up-down}) -- laikas nuo ankstesnio klavišo atleidimo iki kito klavišo paspaudimo.
+    \item \textit{H} (\textit{hold}) --- klavišo paspaudimo trukmė;
+    \item \textit{DD} (\textit{down-down}) --- laikas tarp dviejų gretimų klavišų paspaudimų;
+    \item \textit{UD} (\textit{up-down}) --- laikas nuo ankstesnio klavišo atleidimo iki kito klavišo paspaudimo.
 \end{itemize}
 
 Gaunama 31 skaitinių požymių laiko eilutė vienam slaptažodžio surinkimui. Pagal užduoties reikalavimą atrinkti pirmieji 30 dalyvių (rūšiuojant abėcėliškai pagal subjekto identifikatorių) ir naudojama tik viena sesija (\(\texttt{sessionIndex} = 1\)). Kiekvienas dalyvis sesijoje atliko 50 surinkimų, todėl iš viso turima \(30 \times 50 = 1500\) įrašų. Kiekvienam dalyvis turi 50 įrašų vienoje klasėje, todėl duomenys yra tobulai subalansuoti.
@@ -148,7 +148,7 @@ Duomenų aibių dydžiai pateikti lentelėje~\ref{tab:splits}.
 
 \subsection{Vaizdų paruošimas}
 
-Vaizdai į atmintį įkraunami funkcija \texttt{tf.keras.utils.load\_img}, kuri kiekvieną vaizdą sumažina iki vienodos rezoliucijos \(128 \times 128\) pikselių. Originali \(300 \times 200\) raiška buvo sumažinta dėl dviejų priežasčių: modelių mokymas vyksta naudojant procesorių (toliau --- CPU), todėl reikia riboti atminties ir laiko sąnaudas; gestų atpažinimui užtenka mažesnės raiškos -- klasės skiriasi pagal aiškiai atpažįstamas formas, ne smulkias detales. Pikselių reikšmės normalizuojamos į intervalą \([0; 1]\) padalinant iš \(255\), todėl CNN modelio įvestis yra (\texttt{float32}) tensorius (4D masyvas).
+Vaizdai į atmintį įkraunami funkcija \texttt{tf.keras.utils.load\_img}, kuri kiekvieną vaizdą sumažina iki vienodos rezoliucijos \(128 \times 128\) pikselių. Originali \(300 \times 200\) raiška buvo sumažinta dėl dviejų priežasčių: modelių mokymas vyksta naudojant procesorių (toliau --- CPU), todėl reikia riboti atminties ir laiko sąnaudas; gestų atpažinimui užtenka mažesnės raiškos, klasės skiriasi pagal aiškiai atpažįstamas formas, ne smulkias detales. Pikselių reikšmės normalizuojamos į intervalą \([0; 1]\) padalinant iš \(255\), todėl CNN modelio įvestis yra (\texttt{float32}) tensorius (4D masyvas).
 
 Visi vaizdai apjungiami į keturmačio masyvo formatą \((N, 128, 128, 3)\), tinkamą \texttt{Conv2D} sluoksniui.
 
@@ -161,7 +161,7 @@ y = np.asarray(y, dtype=np.int64)
 
 CMU duomenys įkraunami iš CSV failo (\texttt{pandas.read\_csv}). Atfiltruojami pirmieji 30 dalyvių ir tik pirmoji sesija. Duomenys saugomi dvimačio masyvo pavidalu \((N, 31)\), kuriame eilutė atitinka vieną slaptažodžio surinkimą.
 
-\texttt{Conv1D} sluoksniui reikia \((N, L, C)\) tensoriaus formato, kur \(L\) -- sekos ilgis, o \(C\) -- kanalų skaičius, todėl pridedama tuščia kanalų ašis (\texttt{X[..., np.newaxis]}). Galutinė įvesties forma -- \((N, 31, 1)\). Kadangi skirtingi laiko požymiai turi skirtingą skalę, atliekamas standartizavimas (vidurkis 0, standartinis nuokrypis 1). Standartizavimo statistikos (\(\mu, \sigma\)) skaičiuojamos tik iš mokymo aibės ir tada taikomos validavimo bei testavimo aibėms.
+\texttt{Conv1D} sluoksniui reikia \((N, L, C)\) tensoriaus formato, kur \(L\) --- sekos ilgis, o \(C\) --- kanalų skaičius, todėl pridedama tuščia kanalų ašis (\texttt{X[..., np.newaxis]}). Galutinė įvesties forma --- \((N, 31, 1)\). Kadangi skirtingi laiko požymiai turi skirtingą skalę, atliekamas standartizavimas (vidurkis 0, standartinis nuokrypis 1). Standartizavimo statistikos (\(\mu, \sigma\)) skaičiuojamos tik iš mokymo aibės ir tada taikomos validavimo bei testavimo aibėms.
 
 \begin{verbatim}
 mean = X_tr.mean(axis=(0, 2), keepdims=True)
@@ -231,7 +231,7 @@ Eksperimentų metu varijuoti dydžiai pateikiami lentelėje~\ref{tab:hp}.
     \end{tabular}
 \end{table}
 
-Pasirinkta nuostolių funkcija \texttt{sparse\_categorical\_crossentropy}. Tai klasikinis daugiaklasės klasifikacijos pasirinkimas. \texttt{ChatGPT}
+Pasirinkta nuostolių funkcija \texttt{sparse\_categorical\_crossentropy}. Tai klasikinis daugiaklasės klasifikacijos pasirinkimas. \texttt{ChatGPT}.
 
 \subsection{Tirtos architektūros}
 
@@ -281,7 +281,7 @@ Programinis kodas parašytas Python programavimo kalba. Pagrindinės bibliotekos
     \end{tabular}
 \end{table}
 
-Programa suskirstyta į du modulius: \texttt{main.py} vaizdų klasifikavimui (Conv2D), \texttt{main\_ts.py} laiko eilutėms (Conv1D). Abiejų modulių pagrindinė struktūra identiška: duomenų įkrovimas $\rightarrow$ 80:10:10 padalinimas $\rightarrow$ modelio kūrimo funkcija $\rightarrow$ eksperimentai $\rightarrow$ rezultatų išsaugojimas (\texttt{summary.csv}, mokymo kreivių grafikai, \texttt{confusion matrix} geriausiajam modeliui).
+Programa suskirstyta į du modulius: \texttt{main.py} vaizdų klasifikavimui (Conv2D), \texttt{main\_ts.py} laiko eilutėms (Conv1D). Abiejų modulių pagrindinė struktūra identiška: duomenų įkrovimas -- 80:10:10 padalinimas -- modelio kūrimo funkcija -- eksperimentai -- rezultatų išsaugojimas (\texttt{summary.csv}, mokymo kreivių grafikai, \texttt{confusion matrix} geriausiajam modeliui).
 
 \subsection{Modelio konstravimas pagal konfigūraciją}
 
@@ -320,15 +320,15 @@ def build_model(cfg, input_shape, num_classes):
     \centering
     \caption{Vaizdų CNN architektūrų palyginimas (paklaida ir tikslumas)}
     \label{tab:img_arch}
-    \begin{tabular}{|l|c|c|c|c|c|c|}
+    \begin{tabular}{|l|c|c|c|c|}
         \hline
-        \textbf{Modelis} & \textbf{train\_acc} & \textbf{val\_acc} & \textbf{test\_acc} & \textbf{train\_loss} & \textbf{val\_loss} & \textbf{test\_loss}\\
+        \textbf{Modelis} & \textbf{train\_acc} & \textbf{val\_acc} & \textbf{train\_loss} & \textbf{val\_loss}\\
         \hline
-        \texttt{arch\_small}  & 1{,}0000 & 0{,}9772 & 0{,}9726 & 0{,}0001 & 0{,}0658 & 0{,}1527\\
+        \texttt{arch\_small}  & 1{,}0000 & 0{,}9772 & 0{,}0001 & 0{,}0658\\
         \hline
-        \texttt{arch\_medium} & 1{,}0000 & 1{,}0000 & 0{,}9863 & 3$\cdot 10^{-5}$ & 0{,}0036 & 0{,}1083\\
+        \texttt{arch\_medium} & 1{,}0000 & 1{,}0000 & 3$\cdot 10^{-5}$ & 0{,}0036\\
         \hline
-        \texttt{arch\_large}  & 1{,}0000 & 0{,}9954 & 0{,}9863 & 1$\cdot 10^{-5}$ & 0{,}0089 & 0{,}0750\\
+        \texttt{arch\_large}  & 1{,}0000 & 0{,}9954 & 1$\cdot 10^{-5}$ & 0{,}0089\\
         \hline
     \end{tabular}
 \end{table}
@@ -354,7 +354,7 @@ def build_model(cfg, input_shape, num_classes):
     \label{fig:img_arch_large}
 \end{figure}
 
-Visos trys architektūros pasiekia 100~\% mokymo tikslumą, o validavimo ir testavimo aibėse skiriasi tik nedaug. \texttt{arch\_medium} pasiekia geriausią validavimo tikslumą (\(1{,}0000\)) ir geriausią testavimo tikslumą kartu su \texttt{arch\_large}. Tolesniems hiperparametrų tyrimams pasirinkta \texttt{arch\_medium}, nes tai paprastesnė iš dviejų geriausių.
+Visos trys architektūros pasiekia 100~\% mokymo tikslumą, o validavimo aibėje skiriasi tik nedaug. \texttt{arch\_medium} pasiekia geriausią validavimo tikslumą (\(1{,}0000\)) ir mažiausią validavimo paklaidą. Tolesniems hiperparametrų tyrimams pasirenkama būtent ši architektūra.
 
 \subsubsection{Išmetimo (\textit{dropout}) sluoksnio įtaka}
 
@@ -391,7 +391,7 @@ Visos trys architektūros pasiekia 100~\% mokymo tikslumą, o validavimo ir test
     \label{fig:img_dropout_p05}
 \end{figure}
 
-Mokantis ant paprastų vaizdų rinkinio modelis nepatiria didelio persimokymo, todėl agresyvus \textit{dropout} (\(p = 0{,}5\)) reikšmingai sumažina mokymo tikslumą (\(0{,}9817\)) ir blogina validavimo tikslumą (\(0{,}9543\)) bei padidina validavimo paklaidą daugiau nei dvigubai. Vidutinis \(p = 0{,}25\) taip pat šiek tiek blogina validavimo rezultatus. Geriausia šiam uždaviniui \(p = 0\) -- pasiekia tobulą tikslumą; aukšto \textit{dropout} taikymas tik tankiems sluoksniams (\texttt{dense\_only\_0.5}) yra kompromisas, kuris išlaiko 98{,}63~\% validavimo tikslumą.
+Mokantis ant paprastų vaizdų rinkinio modelis nepasižymi dideliu persimokymu, todėl agresyvus \textit{dropout} (\(p = 0{,}5\)) reikšmingai sumažina mokymo tikslumą (\(0{,}9817\)) ir blogina validavimo tikslumą (\(0{,}9543\)) bei padidina validavimo paklaidą daugiau nei dvigubai. Vidutinis \(p = 0{,}25\) taip pat šiek tiek blogina validavimo rezultatus. Geriausia šiam uždaviniui \(p = 0\) --- pasiekia tobulą tikslumą; aukšto \textit{dropout} taikymas tik tankiems sluoksniams (\texttt{dense\_only\_0.5}) yra kompromisas, kuris pasižymi mažesniu (98{,}63~\%) validavimo tikslumu.
 
 \subsubsection{Paketų normalizavimo (BN) įtaka}
 
@@ -417,7 +417,7 @@ Mokantis ant paprastų vaizdų rinkinio modelis nepatiria didelio persimokymo, t
     \label{fig:img_bn_on}
 \end{figure}
 
-Paketų normalizavimas validavimo aibėje tikslumo praktiškai nekeičia (abu pasiekia \(1{,}0000\)), tačiau šiek tiek padidina mokymo bei validavimo paklaidą. Šiame paprastame uždavinyje BN pridėtinės naudos neduoda -- modelis ir be jos konverguoja iki tobulo validavimo tikslumo per 20 epochų.
+Paketų normalizavimas validavimo aibėje tikslumo praktiškai nekeičia (abu pasiekia \(1{,}0000\)), tačiau šiek tiek padidina mokymo bei validavimo paklaidą. Šiame uždavinyje BN pridėtinės naudos neduoda, modelis ir be jo konverguoja iki tobulo validavimo tikslumo per 20 epochų.
 
 \subsubsection{Aktyvacijos funkcijos įtaka}
 
@@ -440,7 +440,7 @@ Paketų normalizavimas validavimo aibėje tikslumo praktiškai nekeičia (abu pa
     \end{tabular}
 \end{table}
 
-ReLU pasiekia geriausią validavimo tikslumą; Leaky ReLU ir tanh -- nedaug prastesni. ELU šiame uždavinyje šiek tiek atsilieka, tikriausiai dėl jautresnio žemos amplitudės gradiento. Skirtumai tarp aktyvacijų yra tame pačiame triukšmo ribose, todėl gali svyruoti tarp pakartotinių mokymų.
+ReLU pasiekia geriausią validavimo tikslumą. Leaky ReLU ir tanh --- nedaug prastesni. ELU šiame uždavinyje šiek tiek atsilieka. Skirtumai tarp aktyvacijų yra triukšmo ribose, todėl gali svyruoti tarp pakartotinių mokymų. \texttt{ChatGPT}.
 
 \subsubsection{Optimizavimo algoritmo įtaka}
 
@@ -463,7 +463,7 @@ ReLU pasiekia geriausią validavimo tikslumą; Leaky ReLU ir tanh -- nedaug pras
     \end{tabular}
 \end{table}
 
-Adaptacinio mokymosi greičio optimizatoriai (Adam, RMSprop, AdamW) duoda labai panašius rezultatus -- visi pasiekia tobulą arba beveik tobulą validavimo tikslumą. SGD su tuo pačiu mokymosi greičiu \(\eta = 10^{-3}\) ir \texttt{momentum} = 0{,}9 yra šiek tiek per lėtas konverguoti per 20 epochų, todėl jo mokymo tikslumas atsilieka (\(0{,}9903\)).
+Mokymosi greičio optimizatoriai (Adam, RMSprop, AdamW) duoda labai panašius rezultatus, visi pasiekia tobulą arba beveik tobulą validavimo tikslumą. SGD su tuo pačiu mokymosi greičiu \(\eta = 10^{-3}\) ir \texttt{momentum} = 0{,}9 yra šiek tiek per lėtas konverguoti per 20 epochų, todėl jo mokymo tikslumas atsilieka (\(0{,}9903\)). \texttt{ChatGPT}.
 
 \subsection{Laiko eilučių klasifikavimo eksperimentai}
 
@@ -473,15 +473,15 @@ Adaptacinio mokymosi greičio optimizatoriai (Adam, RMSprop, AdamW) duoda labai 
     \centering
     \caption{Laiko eilutės: CNN architektūrų palyginimas}
     \label{tab:ts_arch}
-    \begin{tabular}{|l|c|c|c|c|c|c|}
+    \begin{tabular}{|l|c|c|c|c|}
         \hline
-        \textbf{Modelis} & \textbf{train\_acc} & \textbf{val\_acc} & \textbf{test\_acc} & \textbf{train\_loss} & \textbf{val\_loss} & \textbf{test\_loss}\\
+        \textbf{Modelis} & \textbf{train\_acc} & \textbf{val\_acc} & \textbf{train\_loss} & \textbf{val\_loss}\\
         \hline
-        \texttt{arch\_small}  & 1{,}0000 & 0{,}9200 & 0{,}8800  & 0{,}0013 & 0{,}8428 & 0{,}9149\\
+        \texttt{arch\_small}  & 1{,}0000 & 0{,}9200 & 0{,}0013 & 0{,}8428\\
         \hline
-        \texttt{arch\_medium} & 1{,}0000 & 0{,}9400 & 0{,}8600  & 0{,}0003 & 1{,}2666 & 0{,}8862\\
+        \texttt{arch\_medium} & 1{,}0000 & 0{,}9400 & 0{,}0003 & 1{,}2666\\
         \hline
-        \texttt{arch\_large}  & 1{,}0000 & 0{,}9133 & 0{,}8867  & 6$\cdot 10^{-5}$ & 0{,}9005 & 1{,}0893\\
+        \texttt{arch\_large}  & 1{,}0000 & 0{,}9133 & 6$\cdot 10^{-5}$ & 0{,}9005\\
         \hline
     \end{tabular}
 \end{table}
@@ -507,7 +507,7 @@ Adaptacinio mokymosi greičio optimizatoriai (Adam, RMSprop, AdamW) duoda labai 
     \label{fig:ts_arch_large}
 \end{figure}
 
-Skirtingai nuo vaizdų, visų trijų architektūrų testavimo tikslumas išlieka apie \(86\)--\(89~\%\). Mokymo aibė įsisavinama tobulai (\(100~\%\)), tačiau didelis validavimo paklaidos vienetas (iki \(\sim 1{,}27\)) rodo aiškų persimokymą -- tai matoma ir kreivėse: validavimo paklaidos kreivė pradeda didėti, nors mokymo paklaida ir toliau krenta. Geriausią validavimo tikslumą pasiekė \texttt{arch\_medium} (\(0{,}9400\)), todėl ji pasirenkama tolesniems hiperparametrų tyrimams.
+Skirtingai nuo vaizdų, visų trijų architektūrų validavimo tikslumas išlieka apie \(91\)--\(94~\%\). Mokymo aibė įsisavinama tobulai (\(100~\%\)), tačiau didelė validavimo paklaida (iki \(\sim 1{,}27\)) rodo aiškų persimokymą. Validavimo paklaidos kreivė pradeda didėti, nors mokymo paklaida ir toliau krenta. Geriausią validavimo tikslumą pasiekė \texttt{arch\_medium} (\(0{,}9400\)), todėl ji pasirenkama tolesniems hiperparametrų tyrimams.
 
 \subsubsection{Išmetimo (\textit{dropout}) sluoksnio įtaka}
 
@@ -537,7 +537,7 @@ Skirtingai nuo vaizdų, visų trijų architektūrų testavimo tikslumas išlieka
     \label{fig:ts_dropout_p05}
 \end{figure}
 
-Skirtingai nuo vaizdų atvejo, čia \textit{dropout} pridėjimas reikšmingai sumažina validavimo paklaidą (nuo \(1{,}2666\) iki \(\sim 0{,}25\)--\(0{,}38\)), išlaikant panašų validavimo tikslumą (\(\sim 93\)--\(94~\%\)). Tai dera su matomu persimokymu -- regularizacija šiame uždavinyje yra reikalinga.
+Skirtingai nuo vaizdų atvejo, čia \textit{dropout} pridėjimas reikšmingai sumažina validavimo paklaidą (nuo \(1{,}2666\) iki \(\sim 0{,}25\)--\(0{,}38\)), išlaikant panašų validavimo tikslumą (\(\sim 93\)--\(94~\%\)).
 
 \subsubsection{Paketų normalizavimo įtaka}
 
@@ -563,7 +563,7 @@ Skirtingai nuo vaizdų atvejo, čia \textit{dropout} pridėjimas reikšmingai su
     \label{fig:ts_bn_on}
 \end{figure}
 
-Šiame uždavinyje BN turi didžiausią poveikį iš visų hiperparametrų: validavimo paklaida sumažėja daugiau nei penkis kartus (\(1{,}2666 \rightarrow 0{,}2433\)), nors validavimo tikslumas išlieka toks pat (\(0{,}9400\)). BN ne tik stabilizuoja gradientus, bet ir veikia kaip lengva regularizacija (per paketo statistikų triukšmą).
+Šiame uždavinyje BN turi didžiausią poveikį iš visų hiperparametrų: validavimo paklaida sumažėja daugiau nei penkis kartus (nuo \(1{,}2666\) iki \(0{,}2433\)), nors validavimo tikslumas išlieka toks pat (\(0{,}9400\)).
 
 \subsubsection{Aktyvacijos funkcijos įtaka}
 
@@ -586,7 +586,7 @@ Skirtingai nuo vaizdų atvejo, čia \textit{dropout} pridėjimas reikšmingai su
     \end{tabular}
 \end{table}
 
-Įdomu, kad tanh aktyvacija šiame uždavinyje smarkiai sumažina validavimo paklaidą (\(0{,}2593\) prieš \(1{,}2666\) su ReLU), nepaisant jos atviros gradiento išnykimo problemos giliuose tinkluose. Tai gali būti susiję su tuo, kad standartizuoti įvedimo požymiai (vidurkis 0, dispersija 1) yra ribose, kuriose tanh elgiasi panašiai į linijinį atvaizdavimą.
+tanh pasiekia mažiausią validavimo paklaidą (\(0{,}2593\)), o ReLU -- didžiausią (\(1{,}2666\)); validavimo tikslumas svyruoja nuo \(0{,}9200\) (Leaky ReLU) iki \(0{,}9400\) (ReLU).
 
 \subsubsection{Optimizavimo algoritmo įtaka}
 
@@ -609,12 +609,12 @@ Skirtingai nuo vaizdų atvejo, čia \textit{dropout} pridėjimas reikšmingai su
     \end{tabular}
 \end{table}
 
-Visi adaptaciniai optimizatoriai duoda panašų validavimo tikslumą (\(93\)--\(94~\%\)), o SGD vėl atsilieka tiek mokymo, tiek validavimo aibėse. RMSprop pasiekia mažiausią mokymo paklaidą (\(\approx 10^{-5}\)) ir kartu didžiausią mokymo aibės tikslumą, todėl pagal užduoties 4-ąjį punktą būtent šis modelis pasirenkamas kaip ,,geriausias“ testavimui (žr.~\ref{sec:geriausias} skyrių).
+Visi optimizatoriai duoda panašų validavimo tikslumą (\(93\)--\(94~\%\)), o SGD vėl atsilieka tiek mokymo, tiek validavimo aibėse. RMSprop pasiekia mažiausią mokymo paklaidą (\(\approx 10^{-5}\)) ir kartu didžiausią mokymo aibės tikslumą, todėl būtent šis modelis pasirenkamas galutiniam įvertinimui.
 
 
 \section{Geriausių modelių vertinimas}\label{sec:geriausias}
 
-Pagal užduoties 4-ąjį punktą geriausiu laikomas tas eksperimentas, kuriame mokymo aibei pasiekiamas didžiausias tikslumas ir mažiausia paklaida. Abiejuose uždaviniuose tokiu pasirodė \texttt{opt\_rmsprop} eksperimentas. Toliau šie modeliai įvertinami testavimo aibėje.
+Geriausiu laikomas tas eksperimentas, kuriame mokymo aibei pasiekiamas didžiausias tikslumas ir mažiausia paklaida. Abiejuose uždaviniuose tokiu pasirodė \texttt{opt\_rmsprop} eksperimentas. Toliau šie modeliai įvertinami testavimo aibėje.
 
 \subsection{Vaizdų geriausias modelis}
 
@@ -628,37 +628,20 @@ Geriausio vaizdų modelio (\texttt{opt\_rmsprop}) charakteristikos:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{images/img_confusion.png}
-    \caption{Vaizdų geriausio modelio (\texttt{opt\_rmsprop}) painiavos matrica testavimo aibėje}
+    \caption{Vaizdų geriausio modelio \texttt{confusion matrix} testavimo aibėje}
     \label{fig:img_cm}
 \end{figure}
 
-\begin{table}[H]
-    \centering
-    \caption{Vaizdų geriausio modelio painiavos matrica (skaičiai įrašuose)}
-    \label{tab:img_cm}
-    \begin{tabular}{|l|c|c|c|}
-        \hline
-        \textbf{Tikra $\downarrow$ / Prognozė $\rightarrow$} & \textbf{paper} & \textbf{rock} & \textbf{scissors}\\
-        \hline
-        paper    & 68 & 2 & 2\\
-        \hline
-        rock     & 0  & 72 & 0\\
-        \hline
-        scissors & 0  & 0 & 75\\
-        \hline
-    \end{tabular}
-\end{table}
+Iš \(219\) testavimo vaizdų teisingai klasifikuoti \(215\). Visos \(4\) klaidos --- klasės \texttt{paper} įrašai, kuriuos modelis suklasifikavo kaip \texttt{rock} (\(2\)) ar \texttt{scissors} (\(2\)). Klasės \texttt{rock} ir \texttt{scissors} testavime atpažintos be klaidų.
 
-Iš \(219\) testavimo vaizdų teisingai klasifikuoti \(215\). Visos \(4\) klaidos -- klasės \texttt{paper} įrašai, kuriuos modelis suklasifikavo kaip \texttt{rock} (\(2\)) ar \texttt{scissors} (\(2\)). Klasės \texttt{rock} ir \texttt{scissors} testavime atpažintos be klaidų.
+\subsubsection{30 testavimo pavyzdžių}
 
-\subsubsection{Apie 30 testavimo pavyzdžių}
-
-Pagal užduoties reikalavimą iš testavimo aibės atrinkta po 10 pavyzdžių iš kiekvienos klasės -- iš viso 30 (\ref{fig:img_samples}~paveikslėlis). Visi 30 parinktų vaizdų klasifikuoti teisingai (žaliai pažymėtos antraštės). Tai dera su faktu, kad pagrindinės klaidos lokalizuotos klasėje \texttt{paper}, kurios atrankoje atsitiktinai nepateko jokio klaidingo įrašo.
+Iš testavimo aibės atrinkta po 10 pavyzdžių iš kiekvienos klasės, iš viso 30 (žr. \ref{fig:img_samples}~pav.). Visi 30 parinktų vaizdų klasifikuoti teisingai (žaliai pažymėtos antraštės). Klaidos pasitaikė tik \texttt{paper} klasėje, kurios atsitiktinai nepateko į šį 30 įrašų poaibį.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{images/img_samples.png}
-    \caption{Vaizdų geriausio modelio prognozės 30 testavimo pavyzdžių. ,,T“ -- tikra klasė, ,,P“ -- prognozė; žalia spalva žymi teisingą klasifikavimą}
+    \caption{Vaizdų geriausio modelio prognozės 30 testavimo pavyzdžių. ,,T“ --- tikra klasė, ,,P“ --- prognozė; žalia spalva žymi teisingą klasifikavimą}
     \label{fig:img_samples}
 \end{figure}
 
@@ -674,15 +657,15 @@ Geriausio laiko eilučių modelio (\texttt{opt\_rmsprop}) charakteristikos:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{images/ts_confusion.png}
-    \caption{Laiko eilučių geriausio modelio (\texttt{opt\_rmsprop}) painiavos matrica}
+    \caption{Laiko eilučių geriausio modelio \texttt{confusion matrix}}
     \label{fig:ts_cm}
 \end{figure}
 
-Painiavos matrica (\(30 \times 30\)) yra labai retareikšmė -- dauguma klaidų pavienės. Pavyzdžiui, dalyvis \texttt{s003} kartą suklasifikuotas kaip \texttt{s004}, o \texttt{s007} -- kartą kaip \texttt{s015}. Tai rodo, kad nors atskiros poros dalyvių rašymo tempu yra panašios, sistemiško sąmišio tarp tų pačių klasių nėra.
+\texttt{Confusion matrix} (\(30 \times 30\)) matomos klaidos --- pavienės. Pa vyzdžiui, dalyvis \texttt{s003} kartą suklasifikuotas kaip \texttt{s004}, o \texttt{s007} --- kartą kaip \texttt{s015}. Tai rodo, kad nors atskiros poros dalyvių rašymo tempu yra panašios, sistemiškai blogo klasifikavimo nėra.
 
-\subsubsection{Apie 30 testavimo pavyzdžių}
+\subsubsection{30 testavimo pavyzdžių}
 
-Iš testavimo aibės parinkta po vieną įrašą iš kiekvienos iš \(30\) klasių. Lentelėje~\ref{tab:ts_samples} parodytos tikros ir prognozuotos klasės; iš \(30\) pavyzdžių \(28\) klasifikuoti teisingai, \(2\) -- klaidingai (\texttt{s003} \(\rightarrow\) \texttt{s004}, \texttt{s007} \(\rightarrow\) \texttt{s015}). Tai duoda \(\sim 93~\%\) tikslumą šio mažo poaibio.
+Iš testavimo aibės parinktas vienas įrašas iš kiekvienos iš \(30\) klasių. Lentelėje~\ref{tab:ts_samples} parodytos tikros ir prognozuotos klasės; iš \(30\) pavyzdžių \(28\) klasifikuoti teisingai, \(2\) --- klaidingai (\texttt{s003} -- \texttt{s004}, \texttt{s007} -- \texttt{s015}). Tai duoda \(\sim 93~\%\) tikslumą šio mažo poaibio.
 
 \begin{table}[H]
     \centering
@@ -728,7 +711,7 @@ Iš testavimo aibės parinkta po vieną įrašą iš kiekvienos iš \(30\) klasi
 
 \sectionnonum{Išvados}
 
-Konvoliuciniai neuroniniai tinklai sėkmingai pritaikyti abiem skirtingo tipo uždaviniams -- vaizdų klasifikavimui (3 klasės) ir biometrinių laiko eilučių klasifikavimui (30 klasių). Iš trijų lygintų architektūrų \texttt{arch\_medium} (3 konvoliuciniai blokai, vienas tankus sluoksnis) abu uždaviniai išsprendė geriausiai -- gilesnis tinklas papildomos naudos neduoda, o paprastesnis tampa nestabilus. Vaizdų uždavinyje stiprus \textit{dropout} (\(p = 0{,}5\)) blogina rezultatus, nes modelis nepatiria didelio persimokymo, o laiko eilučių uždavinyje \textit{dropout} (\(p \in \{0{,}25;\ 0{,}5\}\)) reikšmingai sumažina paklaidą ir padidina testavimo tikslumą iki \(\sim 91~\%\). Paketų normalizavimas labiausiai naudingas laiko eilutėms (testavimo tikslumas padidėjo nuo \(86~\%\) iki \(93{,}33~\%\), o paklaida sumažėjo nuo \(0{,}886\) iki \(0{,}210\)), o vaizdams paklaidą sumažino, bet tikslumo praktiškai nepakeitė. Aktyvacijos funkcijos turi mažesnę įtaką: ReLU, Leaky ReLU ir tanh duoda panašų vaizdų tikslumą, o laiko eilutėms tanh netikėtai sumažino paklaidą dėl iš anksto standartizuoto įvedimo. Adaptaciniai optimizatoriai (Adam, RMSprop, AdamW) duoda panašius rezultatus, o SGD su \(\eta = 10^{-3}\) per 20--50 epochų atsilieka. Didžiausias mokymo tikslumas (\(1{,}0000\)) ir mažiausia mokymo paklaida (\(\approx 0\) vaizdams, \(\approx 10^{-5}\) laiko eilutėms) gauti su \texttt{opt\_rmsprop} konfigūracija abiem uždaviniams, todėl būtent ji parinkta galutiniam vertinimui testavimo aibėje. Geriausio vaizdų modelio testavimo tikslumas -- \(98{,}17~\%\) (paklaida \(0{,}142\)), o painiavos matrica rodo, kad visi keturi klaidingi atvejai yra klasės \texttt{paper} prognozavimas kaip \texttt{rock}/\texttt{scissors}, o \texttt{rock} ir \texttt{scissors} atpažintos be klaidų. Geriausio laiko eilučių modelio testavimo tikslumas -- \(88{,}00~\%\) (paklaida \(1{,}079\)), o painiavos matrica retareikšmė -- diagonalė užpildyta, klaidos pavienės. Iš 30 atrinktų testavimo pavyzdžių vaizdams visi (\(30/30\)) klasifikuoti teisingai, o laiko eilutėms -- \(28/30\). Bendras darbo rezultatas patvirtina, kad parametrizuotas CNN karkasas su nedidele paketų normalizavimo ir \textit{dropout} regularizacija yra paprastas ir efektyvus sprendimas tiek vaizdo, tiek laiko eilučių klasifikacijos uždaviniams su ribotais skaičiavimo resursais (CPU).
+Konvoliuciniai neuroniniai tinklai sėkmingai pritaikyti abiem skirtingo tipo uždaviniams: vaizdų klasifikavimui (3 klasės) ir biometrinių laiko eilučių klasifikavimui (30 klasių). Iš trijų lygintų architektūrų \texttt{arch\_medium} (3 konvoliuciniai blokai, vienas tankus sluoksnis) pasižymėjo geriausiai abiems uždaviniams, gilesnis tinklas papildomos naudos neduoda, o paprastesnis tampa nestabilus. Vaizdų uždavinyje stiprus \textit{dropout} (\(p = 0{,}5\)) blogina rezultatus, nes modelis nepatiria didelio persimokymo, o laiko eilučių uždavinyje \textit{dropout} (\(p \in \{0{,}25;\ 0{,}5\}\)) reikšmingai sumažina paklaidą ir padidina testavimo tikslumą iki \(\sim 91~\%\). Paketų normalizavimas labiausiai naudingas laiko eilutėms (testavimo tikslumas padidėjo nuo \(86~\%\) iki \(93{,}33~\%\), o paklaida sumažėjo nuo \(0{,}886\) iki \(0{,}210\)), vaizdams paklaidą sumažino, bet tikslumo praktiškai nepakeitė. Aktyvacijos funkcijos turi mažesnę įtaką: ReLU, Leaky ReLU ir tanh duoda panašų vaizdų tikslumą, tuo tarpu, laiko eilutėms tanh sumažino paklaidą. Optimizatoriai (Adam, RMSprop, AdamW) duoda panašius rezultatus, o SGD su \(\eta = 10^{-3}\). Didžiausias mokymo tikslumas (\(1{,}0000\)) ir mažiausia mokymo paklaida (\(\approx 0\) vaizdams, \(\approx 10^{-5}\) laiko eilutėms) gauti su \texttt{opt\_rmsprop} konfigūracija abiem uždaviniams, todėl būtent ji parinkta galutiniam vertinimui testavimo aibėje. Geriausio vaizdų modelio testavimo tikslumas --- \(98{,}17~\%\) (paklaida \(0{,}142\)), visi keturi klaidingi atvejai yra klasės \texttt{paper} prognozavimas kaip \texttt{rock}/\texttt{scissors}, \texttt{rock} ir \texttt{scissors} atpažintos be klaidų. Geriausio laiko eilučių modelio testavimo tikslumas --- \(88{,}00~\%\) (paklaida \(1{,}079\)), o \texttt{confusion matrix} rodo jog klaidos pavienės ir pasiskirsčiusios. Iš 30 atrinktų testavimo pavyzdžių vaizdams visi (\(30/30\)) klasifikuoti teisingai, o laiko eilutėms --- \(28/30\). Bendras darbo rezultatas patvirtina, kad parametrizuotas CNN karkasas su nedidele paketų normalizavimo ir \textit{dropout} panaudojimu yra paprastas ir efektyvus sprendimas tiek vaizdo, tiek laiko eilučių klasifikacijos uždaviniams.
 
 
 \printbibliography[title = {Literatūra ir šaltiniai}]
@@ -739,10 +722,587 @@ Konvoliuciniai neuroniniai tinklai sėkmingai pritaikyti abiem skirtingo tipo u�
 
 \section{\phantom{Priedas} Vaizdų klasifikavimo programa (\texttt{main.py})}\label{app:main}
 
-Žemiau pateikiamas pilnas vaizdų klasifikavimo programos kodas. Komentarai jame nurodo, kuriuose taškuose buvo naudoti dirbtinio intelekto įrankiai (žr.~\ref{sec:kodas} skyrių).
+Žemiau pateikiamas pilnas vaizdų klasifikavimo programos kodas.
 
 \begin{verbatim}
-% TODO: čia įklijuoti pilną 3Lab/main.py turinį
+import csv
+import os
+import random
+import sys
+from copy import deepcopy
+from pathlib import Path
+
+os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
+os.environ.setdefault("TF_ENABLE_ONEDNN_OPTS", "0")
+
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
+import numpy as np
+import tensorflow as tf
+from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import train_test_split
+from tensorflow.keras import layers, models, optimizers
+
+# Konfiguracija
+SEED = 42
+random.seed(SEED)
+np.random.seed(SEED)
+tf.random.set_seed(SEED)
+
+CW_DIR = Path(__file__).resolve().parent
+DATA_DIR = CW_DIR / "rockpaperscissors"
+RESULTS_DIR = CW_DIR / "rezultatai" / "images"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+
+CLASS_NAMES = ["paper", "rock", "scissors"] 
+IMG_SIZE = (128, 128)  # H x W - sumazinta is originalo (300x200), kad tilptu i atminti
+NUM_CLASSES = len(CLASS_NAMES)
+SUMMARY_CSV = RESULTS_DIR / "summary.csv"
+
+
+# Duomenu paruosimas
+def load_images() -> tuple[np.ndarray, np.ndarray, list[str]]:
+    #Iskraunam visus PNG i atminti, normalizuojam i [0,1].
+    X, y, paths = [], [], []
+    for label_idx, cname in enumerate(CLASS_NAMES):
+        cdir = DATA_DIR / cname
+        files = sorted(cdir.glob("*.png"))
+        for fp in files:
+            img = tf.keras.utils.load_img(str(fp), target_size=IMG_SIZE)
+            arr = tf.keras.utils.img_to_array(img) / 255.0  # float32 [0,1]
+            # nuotraukų pixelių masyvai
+            X.append(arr)
+            # klasių masyvas
+            y.append(label_idx)
+            paths.append(str(fp))
+    # Chat gpt. 3D masyvų masyvas N x (H x W x 3) -> 4D masyvą (N x H x W x 3) (tensorius) 
+    X = np.asarray(X, dtype=np.float32)
+    y = np.asarray(y, dtype=np.int64)
+    return X, y, paths
+
+
+def make_splits(X: np.ndarray, y: np.ndarray, paths: list[str]):
+    #80/10/10 paskirstymas.
+    paths = np.asarray(paths)
+    # 80% mokymui / 20% like įrašai
+    X_tr, X_rest, y_tr, y_rest, p_tr, p_rest = train_test_split(
+        X, y, paths, test_size=0.20, stratify=y, random_state=SEED
+    )
+    # is likusio 20% padalinam per puse -> 10% validacijos / 10% testavimo
+    X_va, X_te, y_va, y_te, p_va, p_te = train_test_split(
+        X_rest, y_rest, p_rest, test_size=0.50, stratify=y_rest, random_state=SEED
+    )
+    return (X_tr, y_tr, p_tr), (X_va, y_va, p_va), (X_te, y_te, p_te)
+
+def make_activation_layer(name: str):
+    # Pagalbine funkcija del leakyReLU parametro negative_slope
+    name = name.lower()
+    if name == "leaky_relu":
+        return layers.LeakyReLU(negative_slope=0.1)
+    return layers.Activation(name)
+
+
+def _make_optimizer(name: str, lr: float):
+    # Pagalbine funkcija del skirtingu parametru
+    name = name.lower()
+    if name == "adam":
+        return optimizers.Adam(learning_rate=lr)
+    if name == "sgd":
+        return optimizers.SGD(learning_rate=lr, momentum=0.9)
+    if name == "rmsprop":
+        return optimizers.RMSprop(learning_rate=lr)
+    if name == "adamw":
+        return optimizers.AdamW(learning_rate=lr)
+    raise ValueError(f"Nezinomas optimizatorius: {name}")
+
+
+def build_model(cfg: dict, input_shape: tuple, num_classes: int) -> tf.keras.Model:
+    """Sukuriamas 'keras' modelis pagal cfg
+
+    cfg pavyzdys:
+      {
+        "blocks": [{"filters":32,"kernel":3,"pool":2,"dropout":0.0,"batch_norm":False,"activation":"relu"}, ...],
+        "dense": [128],
+        "dense_dropout": 0.0,
+        "dense_batch_norm": False,
+        "dense_activation": "relu",
+        "optimizer": "adam", "learning_rate": 1e-3,
+        "loss": "sparse_categorical_crossentropy",
+      }
+
+
+    Input(H, W, 3)
+    → [conv2d → (BN?) → activation → (MaxPool?) → (Dropout?)] × len(blocks)
+    → Flatten
+    → [Dense(units) → (BN?) → activation → (Dropout?)] × len(dense)
+    → Dense(num_classes, softmax)
+    → compile(loss, optimizer, metrics=accuracy)
+    """
+    model = models.Sequential(name=cfg["name"].replace(".", "_"))
+    model.add(layers.Input(shape=input_shape))
+
+    for i, blk in enumerate(cfg["blocks"]):
+        # Conv -> (BN) -> aktyvacija -> Pooling -> (Dropout)
+        # use_bias=False kai BN, nes BN turi savo bias.
+        use_bias = not blk.get("batch_norm", False)
+        model.add(
+            layers.Conv2D(
+                filters=blk["filters"],
+                kernel_size=blk["kernel"],
+                padding="same",
+                use_bias=use_bias,
+                name=f"conv2d_{i}",
+            )
+        )
+        if blk.get("batch_norm", False):
+            model.add(layers.BatchNormalization(name=f"bn_{i}"))
+        model.add(make_activation_layer(blk["activation"]))
+        if blk.get("pool", 0):
+            model.add(layers.MaxPooling2D(pool_size=blk["pool"], name=f"pool_{i}"))
+        if blk.get("dropout", 0.0) > 0.0:
+            model.add(layers.Dropout(blk["dropout"], name=f"drop_{i}"))
+
+    #ChatGpt
+    model.add(layers.Flatten())
+
+    for j, units in enumerate(cfg.get("dense", [])):
+        model.add(layers.Dense(units, use_bias=not cfg.get("dense_batch_norm", False),
+                               name=f"dense_{j}"))
+        if cfg.get("dense_batch_norm", False):
+            model.add(layers.BatchNormalization(name=f"dense_bn_{j}"))
+        model.add(make_activation_layer(cfg.get("dense_activation", "relu")))
+        if cfg.get("dense_dropout", 0.0) > 0.0:
+            model.add(layers.Dropout(cfg["dense_dropout"], name=f"dense_drop_{j}"))
+
+    model.add(layers.Dense(num_classes, activation="softmax", name="output"))
+
+    model.compile(
+        optimizer=_make_optimizer(cfg.get("optimizer", "adam"),
+                                  cfg.get("learning_rate", 1e-3)),
+        loss=cfg.get("loss", "sparse_categorical_crossentropy"),
+        metrics=["accuracy"],
+    )
+    return model
+
+
+def plot_history(history, title: str, save_path: Path):
+    h = history.history
+    epochs = range(1, len(h["loss"]) + 1)
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4))
+
+    axes[0].plot(epochs, h["loss"], label="train")
+    axes[0].plot(epochs, h["val_loss"], label="val")
+    axes[0].set_title("Paklaida (loss)")
+    axes[0].set_xlabel("Epocha")
+    axes[0].set_ylabel("loss")
+    axes[0].legend()
+    axes[0].grid(alpha=0.3)
+    axes[0].xaxis.set_major_locator(MaxNLocator(integer=True))
+
+    axes[1].plot(epochs, h["accuracy"], label="train")
+    axes[1].plot(epochs, h["val_accuracy"], label="val")
+    axes[1].set_title("Tikslumas (accuracy)")
+    axes[1].set_xlabel("Epocha")
+    axes[1].set_ylabel("accuracy")
+    axes[1].legend()
+    axes[1].grid(alpha=0.3)
+    axes[1].xaxis.set_major_locator(MaxNLocator(integer=True))
+
+    fig.suptitle(title)
+    fig.tight_layout()
+    fig.savefig(save_path, dpi=150)
+    plt.close(fig)
+
+
+def append_summary(row: dict):
+    new_file = not SUMMARY_CSV.exists()
+    with SUMMARY_CSV.open("a", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(row.keys()))
+        if new_file:
+            w.writeheader()
+        w.writerow(row)
+
+
+def run_experiment(cfg: dict, splits, input_shape, num_classes):
+    (X_tr, y_tr, _), (X_va, y_va, _), (X_te, y_te, _) = splits
+    print(f"\n=== Eksperimentas: {cfg['name']} ===")
+    print({k: v for k, v in cfg.items() if k != "blocks"})
+    print("blocks =", cfg["blocks"])
+
+    tf.keras.utils.set_random_seed(SEED)  # nors butu palyginama tarp bandymu
+    model = build_model(cfg, input_shape, num_classes)
+    model.summary(print_fn=lambda s: print("  " + s))
+
+    history = model.fit(
+        X_tr, y_tr,
+        validation_data=(X_va, y_va),
+        epochs=cfg["epochs"],
+        batch_size=cfg["batch_size"],
+        verbose=2,
+        shuffle=True,
+    )
+
+    # Galutines mokymo, validavimo ir testavimo metrikos:
+    train_loss, train_acc = model.evaluate(X_tr, y_tr, verbose=0, batch_size=cfg["batch_size"])
+    val_loss, val_acc = model.evaluate(X_va, y_va, verbose=0, batch_size=cfg["batch_size"])
+    test_loss, test_acc = model.evaluate(X_te, y_te, verbose=0, batch_size=cfg["batch_size"])
+    print(f"[{cfg['name']}] train_acc={train_acc:.4f} val_acc={val_acc:.4f} "
+          f"test_acc={test_acc:.4f} | train_loss={train_loss:.4f} "
+          f"val_loss={val_loss:.4f} test_loss={test_loss:.4f}")
+
+    plot_history(history, f"{cfg['name']} - mokymo kreives",
+                 RESULTS_DIR / f"{cfg['name']}_curves.png")
+
+    append_summary({
+        "name": cfg["name"],
+        "epochs": cfg["epochs"],
+        "batch_size": cfg["batch_size"],
+        "optimizer": cfg["optimizer"],
+        "learning_rate": cfg["learning_rate"],
+        "n_conv_blocks": len(cfg["blocks"]),
+        "filters": "-".join(str(b["filters"]) for b in cfg["blocks"]),
+        "kernel": cfg["blocks"][0]["kernel"],
+        "pool": cfg["blocks"][0]["pool"],
+        "conv_dropout": cfg["blocks"][0].get("dropout", 0.0),
+        "dense": "-".join(str(d) for d in cfg.get("dense", [])),
+        "dense_dropout": cfg.get("dense_dropout", 0.0),
+        "batch_norm": cfg["blocks"][0].get("batch_norm", False),
+        "activation": cfg["blocks"][0]["activation"],
+        "loss_fn": cfg["loss"],
+        "train_loss": round(float(train_loss), 5),
+        "train_acc": round(float(train_acc), 5),
+        "val_loss": round(float(val_loss), 5),
+        "val_acc": round(float(val_acc), 5),
+        "test_loss": round(float(test_loss), 5),
+        "test_acc": round(float(test_acc), 5),
+    })
+
+    return {
+        "name": cfg["name"], "model": model, "history": history,
+        "train_acc": train_acc, "train_loss": train_loss,
+        "val_acc": val_acc, "val_loss": val_loss,
+        "test_acc": test_acc, "test_loss": test_loss,
+        "cfg": cfg,
+    }
+
+
+def base_block(filters, *, kernel=3, pool=2, dropout=0.0, batch_norm=False, activation="relu"):
+    return {"filters": filters, "kernel": kernel, "pool": pool,
+            "dropout": dropout, "batch_norm": batch_norm, "activation": activation}
+
+
+def base_cfg(name, blocks, dense, *, optimizer="adam", lr=1e-3,
+             dense_dropout=0.0, dense_bn=False, dense_act="relu",
+             epochs=20, batch_size=32, loss="sparse_categorical_crossentropy"):
+    return {
+        "name": name,
+        "blocks": deepcopy(blocks),
+        "dense": list(dense),
+        "dense_dropout": dense_dropout,
+        "dense_batch_norm": dense_bn,
+        "dense_activation": dense_act,
+        "optimizer": optimizer,
+        "learning_rate": lr,
+        "loss": loss,
+        "epochs": epochs,
+        "batch_size": batch_size,
+    }
+
+
+def architecture_configs(epochs):
+    """Trys skirtingo gylio architekturos (PDF reikalauja >= 3)."""
+    return [
+        base_cfg(
+            "arch_small",
+            blocks=[base_block(32), base_block(64)],
+            dense=[64], epochs=epochs,
+        ),
+        base_cfg(
+            "arch_medium",
+            blocks=[base_block(32), base_block(64), base_block(128)],
+            dense=[128], epochs=epochs,
+        ),
+        base_cfg(
+            "arch_large",
+            blocks=[base_block(32), base_block(64), base_block(128), base_block(128)],
+            dense=[256, 128], epochs=epochs,
+        ),
+    ]
+
+
+def hp_configs_for(best_cfg, epochs):
+    """Hiperparametru tyrimai - vykdomi ant geriausios architekturos.
+
+    Aprepia: dropout, batch normalization, aktyvacijos funkcija, optimizatorius.
+    """
+    cfgs = []
+
+    # Dropout sweep (vienodas dropout visuose conv ir dense sluoksniuose).
+    for p in [0.0, 0.25, 0.5]:
+        c = deepcopy(best_cfg)
+        c["name"] = f"dropout_p{p}"
+        for b in c["blocks"]:
+            b["dropout"] = p
+        c["dense_dropout"] = p
+        c["epochs"] = epochs
+        cfgs.append(c)
+    # Tik dense dropout (atvejis: kelis sluoksnius su skirtingais nustatymais)
+    c = deepcopy(best_cfg)
+    c["name"] = "dropout_dense_only_0.5"
+    for b in c["blocks"]:
+        b["dropout"] = 0.0
+    c["dense_dropout"] = 0.5
+    c["epochs"] = epochs
+    cfgs.append(c)
+
+    # Batch normalization on/off
+    for use_bn in [False, True]:
+        c = deepcopy(best_cfg)
+        c["name"] = f"bn_{'on' if use_bn else 'off'}"
+        for b in c["blocks"]:
+            b["batch_norm"] = use_bn
+        c["dense_batch_norm"] = use_bn
+        c["epochs"] = epochs
+        cfgs.append(c)
+
+    # Aktyvacijos funkcijos
+    for act in ["relu", "tanh", "elu", "leaky_relu"]:
+        c = deepcopy(best_cfg)
+        c["name"] = f"act_{act}"
+        for b in c["blocks"]:
+            b["activation"] = act
+        c["dense_activation"] = act
+        c["epochs"] = epochs
+        cfgs.append(c)
+
+    # Optimizatoriai
+    for opt in ["adam", "sgd", "rmsprop", "adamw"]:
+        c = deepcopy(best_cfg)
+        c["name"] = f"opt_{opt}"
+        c["optimizer"] = opt
+        c["epochs"] = epochs
+        cfgs.append(c)
+
+    return cfgs
+
+
+def plot_confusion_matrix(cm: np.ndarray, classes, save_path: Path, title="Confusion matrix"):
+    fig, ax = plt.subplots(figsize=(5, 4.5))
+    im = ax.imshow(cm, cmap="Blues")
+    ax.set_xticks(range(len(classes)))
+    ax.set_yticks(range(len(classes)))
+    ax.set_xticklabels(classes, rotation=45, ha="right")
+    ax.set_yticklabels(classes)
+    ax.set_xlabel("Prognoze")
+    ax.set_ylabel("Tikra klase")
+    ax.set_title(title)
+    # Rasom skaicius
+    thresh = cm.max() / 2.0 if cm.max() > 0 else 0.5
+    for i in range(cm.shape[0]):
+        for j in range(cm.shape[1]):
+            ax.text(j, i, str(cm[i, j]), ha="center", va="center",
+                    color="white" if cm[i, j] > thresh else "black", fontsize=10)
+    fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    fig.tight_layout()
+    fig.savefig(save_path, dpi=150)
+    plt.close(fig)
+
+
+def evaluate_best(best, splits, classes):
+    (_, _, _), (_, _, _), (X_te, y_te, p_te) = splits
+    model = best["model"]
+    name = best["name"]
+
+    test_loss, test_acc = model.evaluate(X_te, y_te, verbose=0)
+    print(f"\n*** Geriausias modelis: {name} ***")
+    print(f"Testavimo paklaida (loss): {test_loss:.4f}")
+    print(f"Testavimo tikslumas (acc): {test_acc:.4f}")
+
+    (RESULTS_DIR / "best_test_metrics.txt").write_text(
+        f"best_model={name}\n"
+        f"test_loss={test_loss:.5f}\n"
+        f"test_accuracy={test_acc:.5f}\n"
+        f"train_acc={best['train_acc']:.5f}\n"
+        f"train_loss={best['train_loss']:.5f}\n"
+    )
+
+    # Confusion matrix
+    y_pred = np.argmax(model.predict(X_te, verbose=0), axis=1)
+    cm = confusion_matrix(y_te, y_pred, labels=list(range(len(classes))))
+    plot_confusion_matrix(cm, classes, RESULTS_DIR / "best_confusion_matrix.png",
+                          title=f"Confusion matrix - {name}")
+    # CSV variantas (lengva idet i ataskaita)
+    with (RESULTS_DIR / "best_confusion_matrix.csv").open("w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow([""] + classes)
+        for i, cname in enumerate(classes):
+            w.writerow([cname] + [int(v) for v in cm[i]])
+
+    # ~30 testavimo pavyzdziu (10 is kiekvienos klases)
+    rng = np.random.default_rng(SEED)
+    chosen_idx = []
+    for c in range(len(classes)):
+        idxs = np.where(y_te == c)[0]
+        n_take = min(10, len(idxs))
+        chosen_idx.extend(rng.choice(idxs, size=n_take, replace=False).tolist())
+    chosen_idx = np.array(chosen_idx, dtype=int)
+
+    sample_preds = np.argmax(model.predict(X_te[chosen_idx], verbose=0), axis=1)
+    with (RESULTS_DIR / "sample_predictions.csv").open("w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["index_in_test", "image_path", "true_label", "predicted_label", "correct"])
+        for k, idx in enumerate(chosen_idx):
+            tl = classes[int(y_te[idx])]
+            pl = classes[int(sample_preds[k])]
+            w.writerow([int(idx), p_te[idx], tl, pl, int(tl == pl)])
+
+    # Vizualizuojam tinkleli (5 stulpeliai x 6 eilutes)
+    n = len(chosen_idx)
+    cols = 5
+    rows = (n + cols - 1) // cols
+    fig, axes = plt.subplots(rows, cols, figsize=(cols * 2.4, rows * 2.4))
+    axes = np.array(axes).reshape(rows, cols)
+    for k in range(rows * cols):
+        ax = axes[k // cols, k % cols]
+        ax.axis("off")
+        if k < n:
+            idx = chosen_idx[k]
+            ax.imshow(X_te[idx])
+            true_l = classes[int(y_te[idx])]
+            pred_l = classes[int(sample_preds[k])]
+            color = "green" if true_l == pred_l else "red"
+            ax.set_title(f"T:{true_l}\nP:{pred_l}", fontsize=8, color=color)
+    fig.suptitle(f"Testavimo pavyzdziai - {name} (T=tikra, P=prognoze)")
+    fig.tight_layout()
+    fig.savefig(RESULTS_DIR / "sample_predictions_grid.png", dpi=140)
+    plt.close(fig)
+
+    print(f"Pavyzdziu rinkinio dydis: {len(chosen_idx)} (po {len(chosen_idx)//len(classes)} is klases)")
+    print(f"Visi rezultatai: {RESULTS_DIR}")
+
+
+def _load_existing_summary():
+    """Iskraunam jau atliktus eksperimentus is summary.csv (jei yra), kad galetume testi.
+
+    Grazinam dict {name: row_dict}.
+    """
+    out = {}
+    if SUMMARY_CSV.exists():
+        with SUMMARY_CSV.open() as f:
+            for row in csv.DictReader(f):
+                out[row["name"]] = row
+    return out
+
+
+def _row_to_result(row):
+    """Sustatom result-stiliaus dict is summary.csv eilutes (be model objekto)."""
+    return {
+        "name": row["name"],
+        "model": None,  # bus reikalingas tik geriausiajam - persimokom is naujo
+        "history": None,
+        "train_acc": float(row["train_acc"]),
+        "train_loss": float(row["train_loss"]),
+        "val_acc": float(row["val_acc"]),
+        "val_loss": float(row["val_loss"]),
+        "test_acc": float(row["test_acc"]),
+        "test_loss": float(row["test_loss"]),
+        "cfg": None,
+    }
+
+
+def _maybe_run(cfg, splits, input_shape, num_classes, done_rows):
+    """Vykdom eksperimenta tik jei jis dar nepadarytas (rezumavimo logika)."""
+    if cfg["name"] in done_rows:
+        print(f"\n[SKIP] {cfg['name']} jau yra summary.csv - praleidziam.")
+        r = _row_to_result(done_rows[cfg["name"]])
+        r["cfg"] = cfg
+        return r
+    return run_experiment(cfg, splits, input_shape, num_classes)
+
+
+def main():
+    print("Krauni vaizdus is", DATA_DIR)
+    X, y, paths = load_images()
+    print(f"Vaizdu kiekis: {len(X)}, dydis: {X.shape[1:]}, klases: {CLASS_NAMES}")
+    for c, cname in enumerate(CLASS_NAMES):
+        print(f"  {cname}: {(y == c).sum()}")
+
+    splits = make_splits(X, y, paths)
+    (X_tr, y_tr, _), (X_va, y_va, _), (X_te, y_te, _) = splits
+    print(f"Splits: train={len(X_tr)} val={len(X_va)} test={len(X_te)}")
+
+    # Galima keisti epochu skaiciu is komandines eilutes: python main.py 30
+    # Antras argumentas "fresh" istrina sena summary.csv ir pradeda nuo nulio.
+    epochs_default = int(sys.argv[1]) if len(sys.argv) > 1 else 20
+    fresh = (len(sys.argv) > 2 and sys.argv[2].lower() == "fresh")
+    if fresh and SUMMARY_CSV.exists():
+        print("[FRESH] istrinam sena summary.csv")
+        SUMMARY_CSV.unlink()
+    done_rows = _load_existing_summary()
+    if done_rows:
+        print(f"Resume: {len(done_rows)} eksperimentai jau atlikti, juos praleisim.")
+
+    input_shape = X.shape[1:]
+    results: list[dict] = []
+
+    # ---------- A. Architekturu palyginimas ----------
+    print("\n\n##### A. ARCHITEKTURU PALYGINIMAS #####")
+    for cfg in architecture_configs(epochs_default):
+        results.append(_maybe_run(cfg, splits, input_shape, NUM_CLASSES, done_rows))
+
+    # Geriausia (pagal validavimo tiksluma) - jos pagrindu tesiam hiperparametru tyrima
+    arch_results = sorted(results, key=lambda r: r["val_acc"], reverse=True)
+    best_arch = arch_results[0]
+    print(f"\nGeriausia architektura pagal val_acc: {best_arch['name']} "
+          f"(val_acc={best_arch['val_acc']:.4f})")
+    # Jei geriausioji architektura buvo prakraustyta is CSV (be cfg), atkuriam ja is konfiguraciju saraso.
+    if best_arch.get("cfg") is None:
+        for c in architecture_configs(epochs_default):
+            if c["name"] == best_arch["name"]:
+                best_arch_cfg = deepcopy(c)
+                break
+    else:
+        best_arch_cfg = deepcopy(best_arch["cfg"])
+
+    # ---------- B-E. Hiperparametru tyrimai ----------
+    print("\n\n##### B-E. HIPERPARAMETRU TYRIMAI (su geriausia architektura) #####")
+    for cfg in hp_configs_for(best_arch_cfg, epochs_default):
+        results.append(_maybe_run(cfg, splits, input_shape, NUM_CLASSES, done_rows))
+
+    # ---------- Geriausias bandymas (didz. mokymo tikslumas, maz. mokymo paklaida) ----
+    # PDF 4 punktas: didziausias klasifikavimo tikslumas ir mazausia paklaida MOKYMO duomenims.
+    best = max(results, key=lambda r: (r["train_acc"], -r["train_loss"]))
+    print(f"\nIs viso atlikta {len(results)} eksperimentu.")
+    print(f"Geriausias eksperimentas mokymo aibeje: {best['name']} "
+          f"(train_acc={best['train_acc']:.4f}, train_loss={best['train_loss']:.4f})")
+
+    # Jei geriausiajam neturim modelio (buvo praleistas), persimokom ji is naujo.
+    if best["model"] is None:
+        print(f"[REFIT] {best['name']} buvo praleistas - persimokom modeli is naujo testavimui.")
+        # Rasom konfiguracija is architektura/HP saraso.
+        all_cfgs = architecture_configs(epochs_default) + hp_configs_for(best_arch_cfg, epochs_default)
+        cfg = next((c for c in all_cfgs if c["name"] == best["name"]), None)
+        assert cfg is not None, f"Negaliu rasti cfg pavadinimu {best['name']}"
+        # Persimokom be summary papildymo: vykdom tiesiogiai, kad gautume model objekta.
+        tf.keras.utils.set_random_seed(SEED)
+        model = build_model(cfg, input_shape, NUM_CLASSES)
+        model.fit(X_tr, y_tr, validation_data=(X_va, y_va),
+                  epochs=cfg["epochs"], batch_size=cfg["batch_size"], verbose=2, shuffle=True)
+        best["model"] = model
+
+    evaluate_best(best, splits, CLASS_NAMES)
+
+    print("\nVisas santraukos failas:", SUMMARY_CSV)
+    print("Saltinai:")
+    print("  Rock-Paper-Scissors: https://www.kaggle.com/datasets/drgfreeman/rockpaperscissors/data")
+
+
+if __name__ == "__main__":
+    main()
+
 \end{verbatim}
 
 
@@ -751,7 +1311,446 @@ Konvoliuciniai neuroniniai tinklai sėkmingai pritaikyti abiem skirtingo tipo u�
 Žemiau pateikiamas pilnas laiko eilučių klasifikavimo programos kodas.
 
 \begin{verbatim}
-% TODO: čia įklijuoti pilną 3Lab/main_ts.py turinį
+from __future__ import annotations
+import csv
+import os
+import random
+import sys
+from copy import deepcopy
+from pathlib import Path
+
+os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
+os.environ.setdefault("TF_ENABLE_ONEDNN_OPTS", "0")
+
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from tensorflow.keras import layers, models, optimizers
+
+SEED = 42
+random.seed(SEED)
+np.random.seed(SEED)
+tf.random.set_seed(SEED)
+
+THIS_DIR = Path(__file__).resolve().parent
+CSV_PATH = THIS_DIR / "DSL-StrongPasswordData.csv"
+RESULTS_DIR = THIS_DIR / "rezultatai" / "timeseries"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+
+NUM_USERS = 30          # PDF reikalavimas: 30 klasiu
+SESSION = 1             # PDF: pasirinkti viena sesija
+SUMMARY_CSV = RESULTS_DIR / "summary.csv"
+
+
+def load_dataset():
+    """Iskraunam CSV, atsirenkam 30 dalyviu ir 1 sesija, padarom (N, 31, 1) tensoru.
+
+    Grazinam: X (N, 31, 1) float32, y (N,) int (0..29), class_names (30 stringu),
+    feature_names (31 stringu).
+    """
+    df = pd.read_csv(CSV_PATH)
+    feature_cols = [c for c in df.columns if c not in ("subject", "sessionIndex", "rep")]
+    assert len(feature_cols) == 31, f"Tikektasi 31 pozimio, gauta {len(feature_cols)}"
+
+    df = df[df["sessionIndex"] == SESSION].copy()
+    # Pirmi 30 unikaliu dalyviu (sorted, kad butu deterministiska)
+    subjects = sorted(df["subject"].unique())[:NUM_USERS]
+    df = df[df["subject"].isin(subjects)].reset_index(drop=True)
+
+    le = LabelEncoder().fit(subjects)
+    y = le.transform(df["subject"].values).astype(np.int64)
+    X = df[feature_cols].values.astype(np.float32)  # (N, 31)
+    X = X[..., np.newaxis]  # -> (N, 31, 1) - reikalingas Conv1D
+    return X, y, list(le.classes_), feature_cols
+
+
+def make_splits(X, y):
+    """80/10/10 stratifikuotas; standartizuojam pagal mokymo aibes statistikas."""
+    X_tr, X_rest, y_tr, y_rest = train_test_split(
+        X, y, test_size=0.20, stratify=y, random_state=SEED
+    )
+    X_va, X_te, y_va, y_te = train_test_split(
+        X_rest, y_rest, test_size=0.50, stratify=y_rest, random_state=SEED
+    )
+    # Standartizuojam pagal stulpelius (per pozini), naudodami tik mokymo aibes statistikas.
+    mean = X_tr.mean(axis=(0, 2), keepdims=True)
+    std = X_tr.std(axis=(0, 2), keepdims=True) + 1e-8
+    X_tr = (X_tr - mean) / std
+    X_va = (X_va - mean) / std
+    X_te = (X_te - mean) / std
+    return (X_tr, y_tr), (X_va, y_va), (X_te, y_te)
+
+
+def _make_activation_layer(name: str):
+    name = name.lower()
+    if name == "leaky_relu":
+        return layers.LeakyReLU(negative_slope=0.1)
+    return layers.Activation(name)
+
+
+def _make_optimizer(name: str, lr: float):
+    name = name.lower()
+    if name == "adam":
+        return optimizers.Adam(learning_rate=lr)
+    if name == "sgd":
+        return optimizers.SGD(learning_rate=lr, momentum=0.9)
+    if name == "rmsprop":
+        return optimizers.RMSprop(learning_rate=lr)
+    if name == "adamw":
+        return optimizers.AdamW(learning_rate=lr)
+    raise ValueError(f"Nezinomas optimizatorius: {name}")
+
+
+def build_model(cfg: dict, input_shape, num_classes):
+    """Sequential 1D CNN pagal cfg (analogiska kaip image versijoje)."""
+    model = models.Sequential(name=cfg["name"].replace(".", "_"))
+    model.add(layers.Input(shape=input_shape))
+
+    for i, blk in enumerate(cfg["blocks"]):
+        use_bias = not blk.get("batch_norm", False)
+        model.add(layers.Conv1D(
+            filters=blk["filters"],
+            kernel_size=blk["kernel"],
+            padding="same",
+            use_bias=use_bias,
+            name=f"conv1d_{i}",
+        ))
+        if blk.get("batch_norm", False):
+            model.add(layers.BatchNormalization(name=f"bn_{i}"))
+        model.add(_make_activation_layer(blk["activation"]))
+        if blk.get("pool", 0):
+            # Po keliu poolingu eilute trumpeja, todel apsidraudziam pool=1 jei per trumpa.
+            model.add(layers.MaxPooling1D(pool_size=blk["pool"], padding="same",
+                                          name=f"pool_{i}"))
+        if blk.get("dropout", 0.0) > 0.0:
+            model.add(layers.Dropout(blk["dropout"], name=f"drop_{i}"))
+
+    model.add(layers.Flatten())
+
+    for j, units in enumerate(cfg.get("dense", [])):
+        model.add(layers.Dense(units, use_bias=not cfg.get("dense_batch_norm", False),
+                               name=f"dense_{j}"))
+        if cfg.get("dense_batch_norm", False):
+            model.add(layers.BatchNormalization(name=f"dense_bn_{j}"))
+        model.add(_make_activation_layer(cfg.get("dense_activation", "relu")))
+        if cfg.get("dense_dropout", 0.0) > 0.0:
+            model.add(layers.Dropout(cfg["dense_dropout"], name=f"dense_drop_{j}"))
+
+    model.add(layers.Dense(num_classes, activation="softmax", name="output"))
+
+    model.compile(
+        optimizer=_make_optimizer(cfg.get("optimizer", "adam"),
+                                  cfg.get("learning_rate", 1e-3)),
+        loss=cfg.get("loss", "sparse_categorical_crossentropy"),
+        metrics=["accuracy"],
+    )
+    return model
+
+
+def plot_history(history, title, save_path):
+    h = history.history
+    epochs = range(1, len(h["loss"]) + 1)
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4))
+    axes[0].plot(epochs, h["loss"], label="train")
+    axes[0].plot(epochs, h["val_loss"], label="val")
+    axes[0].set_title("Paklaida (loss)"); axes[0].set_xlabel("Epocha")
+    axes[0].set_ylabel("loss"); axes[0].legend(); axes[0].grid(alpha=0.3)
+    axes[0].xaxis.set_major_locator(MaxNLocator(integer=True))
+    axes[1].plot(epochs, h["accuracy"], label="train")
+    axes[1].plot(epochs, h["val_accuracy"], label="val")
+    axes[1].set_title("Tikslumas (accuracy)"); axes[1].set_xlabel("Epocha")
+    axes[1].set_ylabel("accuracy"); axes[1].legend(); axes[1].grid(alpha=0.3)
+    axes[1].xaxis.set_major_locator(MaxNLocator(integer=True))
+    fig.suptitle(title); fig.tight_layout()
+    fig.savefig(save_path, dpi=150); plt.close(fig)
+
+
+def append_summary(row):
+    new_file = not SUMMARY_CSV.exists()
+    with SUMMARY_CSV.open("a", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(row.keys()))
+        if new_file:
+            w.writeheader()
+        w.writerow(row)
+
+
+def run_experiment(cfg, splits, input_shape, num_classes):
+    (X_tr, y_tr), (X_va, y_va), (X_te, y_te) = splits
+    print(f"\n=== Eksperimentas: {cfg['name']} ===")
+    print({k: v for k, v in cfg.items() if k != "blocks"})
+    print("blocks =", cfg["blocks"])
+
+    tf.keras.utils.set_random_seed(SEED)
+    model = build_model(cfg, input_shape, num_classes)
+    model.summary(print_fn=lambda s: print("  " + s))
+
+    history = model.fit(
+        X_tr, y_tr,
+        validation_data=(X_va, y_va),
+        epochs=cfg["epochs"],
+        batch_size=cfg["batch_size"],
+        verbose=2, shuffle=True,
+    )
+
+    train_loss, train_acc = model.evaluate(X_tr, y_tr, verbose=0, batch_size=cfg["batch_size"])
+    val_loss, val_acc = model.evaluate(X_va, y_va, verbose=0, batch_size=cfg["batch_size"])
+    test_loss, test_acc = model.evaluate(X_te, y_te, verbose=0, batch_size=cfg["batch_size"])
+    print(f"[{cfg['name']}] train_acc={train_acc:.4f} val_acc={val_acc:.4f} "
+          f"test_acc={test_acc:.4f} | train_loss={train_loss:.4f} "
+          f"val_loss={val_loss:.4f} test_loss={test_loss:.4f}")
+
+    plot_history(history, f"{cfg['name']} - mokymo kreives",
+                 RESULTS_DIR / f"{cfg['name']}_curves.png")
+
+    append_summary({
+        "name": cfg["name"],
+        "epochs": cfg["epochs"], "batch_size": cfg["batch_size"],
+        "optimizer": cfg["optimizer"], "learning_rate": cfg["learning_rate"],
+        "n_conv_blocks": len(cfg["blocks"]),
+        "filters": "-".join(str(b["filters"]) for b in cfg["blocks"]),
+        "kernel": cfg["blocks"][0]["kernel"],
+        "pool": cfg["blocks"][0]["pool"],
+        "conv_dropout": cfg["blocks"][0].get("dropout", 0.0),
+        "dense": "-".join(str(d) for d in cfg.get("dense", [])),
+        "dense_dropout": cfg.get("dense_dropout", 0.0),
+        "batch_norm": cfg["blocks"][0].get("batch_norm", False),
+        "activation": cfg["blocks"][0]["activation"],
+        "loss_fn": cfg["loss"],
+        "train_loss": round(float(train_loss), 5),
+        "train_acc": round(float(train_acc), 5),
+        "val_loss": round(float(val_loss), 5),
+        "val_acc": round(float(val_acc), 5),
+        "test_loss": round(float(test_loss), 5),
+        "test_acc": round(float(test_acc), 5),
+    })
+
+    return {
+        "name": cfg["name"], "model": model, "history": history,
+        "train_acc": train_acc, "train_loss": train_loss,
+        "val_acc": val_acc, "val_loss": val_loss,
+        "test_acc": test_acc, "test_loss": test_loss,
+        "cfg": cfg,
+    }
+
+
+def base_block(filters, *, kernel=3, pool=2, dropout=0.0, batch_norm=False, activation="relu"):
+    return {"filters": filters, "kernel": kernel, "pool": pool,
+            "dropout": dropout, "batch_norm": batch_norm, "activation": activation}
+
+
+def base_cfg(name, blocks, dense, *, optimizer="adam", lr=1e-3,
+             dense_dropout=0.0, dense_bn=False, dense_act="relu",
+             epochs=25, batch_size=32, loss="sparse_categorical_crossentropy"):
+    return {
+        "name": name,
+        "blocks": deepcopy(blocks),
+        "dense": list(dense),
+        "dense_dropout": dense_dropout,
+        "dense_batch_norm": dense_bn,
+        "dense_activation": dense_act,
+        "optimizer": optimizer,
+        "learning_rate": lr,
+        "loss": loss,
+        "epochs": epochs,
+        "batch_size": batch_size,
+    }
+
+
+def architecture_configs(epochs):
+    """3 skirtingos architekturos. Eilutes ilgis = 31, todel naudojam pool=2 atsargiai."""
+    return [
+        base_cfg(
+            "arch_small",
+            blocks=[base_block(32, kernel=3, pool=2),
+                    base_block(64, kernel=3, pool=2)],
+            dense=[64], epochs=epochs,
+        ),
+        base_cfg(
+            "arch_medium",
+            blocks=[base_block(32, kernel=5, pool=2),
+                    base_block(64, kernel=3, pool=2),
+                    base_block(128, kernel=3, pool=1)],  # pool=1 - issaugom likusi ilgi
+            dense=[128], epochs=epochs,
+        ),
+        base_cfg(
+            "arch_large",
+            blocks=[base_block(64, kernel=5, pool=2),
+                    base_block(128, kernel=3, pool=2),
+                    base_block(128, kernel=3, pool=1),
+                    base_block(64, kernel=3, pool=1)],
+            dense=[256, 128], epochs=epochs,
+        ),
+    ]
+
+
+def hp_configs_for(best_cfg, epochs):
+    cfgs = []
+    # Dropout sweep
+    for p in [0.0, 0.25, 0.5]:
+        c = deepcopy(best_cfg)
+        c["name"] = f"dropout_p{p}"
+        for b in c["blocks"]:
+            b["dropout"] = p
+        c["dense_dropout"] = p
+        c["epochs"] = epochs
+        cfgs.append(c)
+    # Tik dense dropout
+    c = deepcopy(best_cfg)
+    c["name"] = "dropout_dense_only_0.5"
+    for b in c["blocks"]:
+        b["dropout"] = 0.0
+    c["dense_dropout"] = 0.5
+    c["epochs"] = epochs
+    cfgs.append(c)
+    # Batch norm
+    for use_bn in [False, True]:
+        c = deepcopy(best_cfg)
+        c["name"] = f"bn_{'on' if use_bn else 'off'}"
+        for b in c["blocks"]:
+            b["batch_norm"] = use_bn
+        c["dense_batch_norm"] = use_bn
+        c["epochs"] = epochs
+        cfgs.append(c)
+    # Aktyvacijos
+    for act in ["relu", "tanh", "elu", "leaky_relu"]:
+        c = deepcopy(best_cfg)
+        c["name"] = f"act_{act}"
+        for b in c["blocks"]:
+            b["activation"] = act
+        c["dense_activation"] = act
+        c["epochs"] = epochs
+        cfgs.append(c)
+    # Optimizatoriai
+    for opt in ["adam", "sgd", "rmsprop", "adamw"]:
+        c = deepcopy(best_cfg)
+        c["name"] = f"opt_{opt}"
+        c["optimizer"] = opt
+        c["epochs"] = epochs
+        cfgs.append(c)
+    return cfgs
+
+
+def plot_confusion_matrix(cm, classes, save_path, title="Confusion matrix"):
+    fig, ax = plt.subplots(figsize=(9, 8))
+    im = ax.imshow(cm, cmap="Blues")
+    ax.set_xticks(range(len(classes)))
+    ax.set_yticks(range(len(classes)))
+    ax.set_xticklabels(classes, rotation=90, fontsize=7)
+    ax.set_yticklabels(classes, fontsize=7)
+    ax.set_xlabel("Prognoze")
+    ax.set_ylabel("Tikra klase")
+    ax.set_title(title)
+    fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    fig.tight_layout()
+    fig.savefig(save_path, dpi=150)
+    plt.close(fig)
+
+
+def evaluate_best(best, splits, classes):
+    (_, _), (_, _), (X_te, y_te) = splits
+    model = best["model"]
+    name = best["name"]
+
+    test_loss, test_acc = model.evaluate(X_te, y_te, verbose=0)
+    print(f"\n*** Geriausias modelis: {name} ***")
+    print(f"Testavimo paklaida (loss): {test_loss:.4f}")
+    print(f"Testavimo tikslumas (acc): {test_acc:.4f}")
+
+    (RESULTS_DIR / "best_test_metrics.txt").write_text(
+        f"best_model={name}\n"
+        f"test_loss={test_loss:.5f}\n"
+        f"test_accuracy={test_acc:.5f}\n"
+        f"train_acc={best['train_acc']:.5f}\n"
+        f"train_loss={best['train_loss']:.5f}\n"
+    )
+
+    y_pred = np.argmax(model.predict(X_te, verbose=0), axis=1)
+    cm = confusion_matrix(y_te, y_pred, labels=list(range(len(classes))))
+    plot_confusion_matrix(cm, classes, RESULTS_DIR / "best_confusion_matrix.png",
+                          title=f"Confusion matrix - {name}")
+    with (RESULTS_DIR / "best_confusion_matrix.csv").open("w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow([""] + classes)
+        for i, cname in enumerate(classes):
+            w.writerow([cname] + [int(v) for v in cm[i]])
+
+    # Po viena pavyzdi is kiekvienos klases (30 klasiu -> 30 irasu)
+    rng = np.random.default_rng(SEED)
+    chosen_idx = []
+    for c in range(len(classes)):
+        idxs = np.where(y_te == c)[0]
+        if len(idxs) > 0:
+            chosen_idx.append(int(rng.choice(idxs)))
+    chosen_idx = np.array(chosen_idx, dtype=int)
+    sample_preds = np.argmax(model.predict(X_te[chosen_idx], verbose=0), axis=1)
+
+    with (RESULTS_DIR / "sample_predictions.csv").open("w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["index_in_test", "true_subject", "predicted_subject", "correct"])
+        for k, idx in enumerate(chosen_idx):
+            tl = classes[int(y_te[idx])]
+            pl = classes[int(sample_preds[k])]
+            w.writerow([int(idx), tl, pl, int(tl == pl)])
+
+    correct = int(sum(int(y_te[idx]) == int(sample_preds[k]) for k, idx in enumerate(chosen_idx)))
+    print(f"Pavyzdziu rinkinys: {len(chosen_idx)} (po 1 is klases), is ju teisingai: {correct}")
+    print(f"Visi rezultatai: {RESULTS_DIR}")
+
+
+def main():
+    print("Krauni laiko eilutes is", CSV_PATH)
+    X, y, classes, feature_cols = load_dataset()
+    print(f"Dalyviu (klasiu): {len(classes)}, irasu: {len(X)}, pozimiai: {X.shape[1]} (kanal: {X.shape[2]})")
+    print(f"Sesija: {SESSION}, dalyviai: {classes}")
+
+    splits = make_splits(X, y)
+    (X_tr, y_tr), (X_va, y_va), (X_te, y_te) = splits
+    print(f"Splits: train={len(X_tr)} val={len(X_va)} test={len(X_te)}")
+
+    epochs_default = int(sys.argv[1]) if len(sys.argv) > 1 else 40
+
+    if SUMMARY_CSV.exists():
+        SUMMARY_CSV.unlink()
+
+    input_shape = X.shape[1:]  # (31, 1)
+    results = []
+
+    print("\n\n##### A. ARCHITEKTURU PALYGINIMAS #####")
+    for cfg in architecture_configs(epochs_default):
+        results.append(run_experiment(cfg, splits, input_shape, len(classes)))
+
+    arch_results = sorted(results, key=lambda r: r["val_acc"], reverse=True)
+    best_arch = arch_results[0]
+    print(f"\nGeriausia architektura pagal val_acc: {best_arch['name']} "
+          f"(val_acc={best_arch['val_acc']:.4f})")
+    best_arch_cfg = deepcopy(best_arch["cfg"])
+
+    print("\n\n##### B-E. HIPERPARAMETRU TYRIMAI (su geriausia architektura) #####")
+    for cfg in hp_configs_for(best_arch_cfg, epochs_default):
+        results.append(run_experiment(cfg, splits, input_shape, len(classes)))
+
+    best = max(results, key=lambda r: (r["train_acc"], -r["train_loss"]))
+    print(f"\nIs viso atlikta {len(results)} eksperimentu.")
+    print(f"Geriausias eksperimentas mokymo aibeje: {best['name']} "
+          f"(train_acc={best['train_acc']:.4f}, train_loss={best['train_loss']:.4f})")
+
+    evaluate_best(best, splits, classes)
+
+    print("\nVisas santraukos failas:", SUMMARY_CSV)
+    print("Saltinis: https://www.cs.cmu.edu/~keystroke/")
+
+
+if __name__ == "__main__":
+    main()
+
 \end{verbatim}
 
 

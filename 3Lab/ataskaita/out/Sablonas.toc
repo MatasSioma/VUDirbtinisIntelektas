@@ -1,26 +1,21 @@
 \selectlanguage *{lithuanian}
 \selectlanguage *{lithuanian}
 \selectlanguage *{lithuanian}
-\contentsline {section}{Įvadas}{4}{Doc-Start}%
-\contentsline {section}{\numberline {1.}Duomenys}{5}{section.1}%
-\contentsline {subsection}{\numberline {1.1.}Vaizdų duomenų rinkinys}{5}{subsection.1.1}%
-\contentsline {subsection}{\numberline {1.2.}Laiko eilučių duomenų rinkinys}{5}{subsection.1.2}%
-\contentsline {section}{\numberline {2.}Duomenų paruošimas}{6}{section.2}%
-\contentsline {subsection}{\numberline {2.1.}Vaizdų paruošimas}{6}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2.}Laiko eilučių paruošimas}{6}{subsection.2.2}%
+\contentsline {section}{Darbo tikslas}{3}{Doc-Start}%
+\contentsline {section}{\numberline {1.}Duomenys}{4}{section.1}%
+\contentsline {subsection}{\numberline {1.1.}Vaizdų duomenų rinkinys}{4}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2.}Laiko eilučių duomenų rinkinys}{4}{subsection.1.2}%
+\contentsline {section}{\numberline {2.}Duomenų paruošimas}{5}{section.2}%
+\contentsline {subsection}{\numberline {2.1.}Vaizdų paruošimas}{5}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2.}Laiko eilučių paruošimas}{5}{subsection.2.2}%
 \contentsline {section}{\numberline {3.}Skaičiavimo resursai}{7}{section.3}%
 \contentsline {section}{\numberline {4.}Naudojami konvoliuciniai neuroniniai tinklai}{8}{section.4}%
 \contentsline {subsection}{\numberline {4.1.}Bendra architektūros schema}{8}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2.}Hiperparametrų ribos}{8}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3.}Tirtos architektūros}{9}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.3.}Tirtos architektūros}{8}{subsection.4.3}%
 \contentsline {section}{\numberline {5.}Programinis kodas}{10}{section.5}%
 \contentsline {subsection}{\numberline {5.1.}Naudoti įrankiai ir bibliotekos}{10}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2.}Pagrindinės funkcijos}{10}{subsection.5.2}%
-\contentsline {subsubsection}{\numberline {5.2.1.}Modelio konstravimas pagal konfigūraciją}{10}{subsubsection.5.2.1}%
-\contentsline {subsubsection}{\numberline {5.2.2.}Vaizdų įkrovimas ir keturmatis tensorius}{11}{subsubsection.5.2.2}%
-\contentsline {subsubsection}{\numberline {5.2.3.}Eksperimentų kilpa ir rezultatų saugojimas}{11}{subsubsection.5.2.3}%
-\contentsline {subsubsection}{\numberline {5.2.4.}Geriausio modelio vertinimas ir 30 pavyzdžių}{11}{subsubsection.5.2.4}%
-\contentsline {subsection}{\numberline {5.3.}Apibendrinimas dėl DI įrankių naudojimo}{11}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.2.}Modelio konstravimas pagal konfigūraciją}{10}{subsection.5.2}%
 \contentsline {section}{\numberline {6.}Tyrimo rezultatai}{12}{section.6}%
 \contentsline {subsection}{\numberline {6.1.}Vaizdų klasifikavimo eksperimentai}{12}{subsection.6.1}%
 \contentsline {subsubsection}{\numberline {6.1.1.}Architektūrų palyginimas}{12}{subsubsection.6.1.1}%
@@ -34,12 +29,12 @@
 \contentsline {subsubsection}{\numberline {6.2.3.}Paketų normalizavimo įtaka}{17}{subsubsection.6.2.3}%
 \contentsline {subsubsection}{\numberline {6.2.4.}Aktyvacijos funkcijos įtaka}{18}{subsubsection.6.2.4}%
 \contentsline {subsubsection}{\numberline {6.2.5.}Optimizavimo algoritmo įtaka}{18}{subsubsection.6.2.5}%
-\contentsline {section}{\numberline {7.}Geriausių modelių vertinimas}{20}{section.7}%
-\contentsline {subsection}{\numberline {7.1.}Vaizdų geriausias modelis}{20}{subsection.7.1}%
-\contentsline {subsubsection}{\numberline {7.1.1.}Apie 30 testavimo pavyzdžių}{21}{subsubsection.7.1.1}%
-\contentsline {subsection}{\numberline {7.2.}Laiko eilučių geriausias modelis}{22}{subsection.7.2}%
-\contentsline {subsubsection}{\numberline {7.2.1.}Apie 30 testavimo pavyzdžių}{22}{subsubsection.7.2.1}%
-\contentsline {section}{Išvados}{24}{table.caption.32}%
+\contentsline {section}{\numberline {7.}Geriausių modelių vertinimas}{19}{section.7}%
+\contentsline {subsection}{\numberline {7.1.}Vaizdų geriausias modelis}{19}{subsection.7.1}%
+\contentsline {subsubsection}{\numberline {7.1.1.}30 testavimo pavyzdžių}{19}{subsubsection.7.1.1}%
+\contentsline {subsection}{\numberline {7.2.}Laiko eilučių geriausias modelis}{20}{subsection.7.2}%
+\contentsline {subsubsection}{\numberline {7.2.1.}30 testavimo pavyzdžių}{21}{subsubsection.7.2.1}%
+\contentsline {section}{Išvados}{23}{table.caption.31}%
 \bgroup 
 \egroup 
 \bgroup 
@@ -48,13 +43,5 @@
 \egroup 
 \bgroup 
 \egroup 
-\bgroup 
-\egroup 
-\bgroup 
-\egroup 
-\bgroup 
-\egroup 
-\bgroup 
-\egroup 
-\contentsline {section}{\numberline {1 priedas.}\phantom {Priedas} Vaizdų klasifikavimo programa (\texttt {main.py})}{26}{appendix.A}%
-\contentsline {section}{\numberline {2 priedas.}\phantom {Priedas} Laiko eilučių klasifikavimo programa (\texttt {main\_ts.py})}{27}{appendix.B}%
+\contentsline {section}{\numberline {1 priedas.}\phantom {Priedas} Vaizdų klasifikavimo programa (\texttt {main.py})}{25}{appendix.A}%
+\contentsline {section}{\numberline {2 priedas.}\phantom {Priedas} Laiko eilučių klasifikavimo programa (\texttt {main\_ts.py})}{40}{appendix.B}%

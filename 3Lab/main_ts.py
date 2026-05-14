@@ -1,16 +1,3 @@
-"""
-3 Laboratorinis darbas - Laiko eiluciu klasifikavimas konvoliuciniu neuroniniu tinklu (1D).
-Duomenu rinkinys: CMU Keystroke Dynamics (slaptazodis "tie5Roanl"),
-51 dalyvis x 8 sesijos x 50 pakartojimu, 31 laiko poziniai.
-
-Siame skripte:
-- pasirenkam pirmus 30 dalyviu (sortuotai is 51) ir 1 sesija -> 1500 irasu, 30 klasiu;
-- 80:10:10 stratifikuotas suskirstymas;
-- 1D konvoliucinis tinklas, eksperimentai su >= 3 architekturomis ir hiperparametrais.
-
-Vykdoma:
-    python main_ts.py
-"""
 from __future__ import annotations
 
 import csv
@@ -36,9 +23,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras import layers, models, optimizers
 
-# -----------------------------------------------------------------------------
-# Konfiguracija
-# -----------------------------------------------------------------------------
 SEED = 42
 random.seed(SEED)
 np.random.seed(SEED)
@@ -54,9 +38,6 @@ SESSION = 1             # PDF: pasirinkti viena sesija
 SUMMARY_CSV = RESULTS_DIR / "summary.csv"
 
 
-# -----------------------------------------------------------------------------
-# Duomenu paruosimas
-# -----------------------------------------------------------------------------
 def load_dataset():
     """Iskraunam CSV, atsirenkam 30 dalyviu ir 1 sesija, padarom (N, 31, 1) tensoru.
 
@@ -96,9 +77,6 @@ def make_splits(X, y):
     return (X_tr, y_tr), (X_va, y_va), (X_te, y_te)
 
 
-# -----------------------------------------------------------------------------
-# Modelio konstravimas
-# -----------------------------------------------------------------------------
 def _make_activation_layer(name: str):
     name = name.lower()
     if name == "leaky_relu":
@@ -165,9 +143,6 @@ def build_model(cfg: dict, input_shape, num_classes):
     return model
 
 
-# -----------------------------------------------------------------------------
-# Eksperimento helperiai (tie patys kaip image versijoje, tik be path-related)
-# -----------------------------------------------------------------------------
 def plot_history(history, title, save_path):
     h = history.history
     epochs = range(1, len(h["loss"]) + 1)
@@ -254,9 +229,6 @@ def run_experiment(cfg, splits, input_shape, num_classes):
     }
 
 
-# -----------------------------------------------------------------------------
-# Eksperimentu rinkinys
-# -----------------------------------------------------------------------------
 def base_block(filters, *, kernel=3, pool=2, dropout=0.0, batch_norm=False, activation="relu"):
     return {"filters": filters, "kernel": kernel, "pool": pool,
             "dropout": dropout, "batch_norm": batch_norm, "activation": activation}
@@ -354,9 +326,6 @@ def hp_configs_for(best_cfg, epochs):
     return cfgs
 
 
-# -----------------------------------------------------------------------------
-# Geriausio modelio testavimas + confusion matrix + ~30 pavyzdziu
-# -----------------------------------------------------------------------------
 def plot_confusion_matrix(cm, classes, save_path, title="Confusion matrix"):
     fig, ax = plt.subplots(figsize=(9, 8))
     im = ax.imshow(cm, cmap="Blues")
@@ -424,9 +393,6 @@ def evaluate_best(best, splits, classes):
     print(f"Visi rezultatai: {RESULTS_DIR}")
 
 
-# -----------------------------------------------------------------------------
-# main
-# -----------------------------------------------------------------------------
 def main():
     print("Krauni laiko eilutes is", CSV_PATH)
     X, y, classes, feature_cols = load_dataset()

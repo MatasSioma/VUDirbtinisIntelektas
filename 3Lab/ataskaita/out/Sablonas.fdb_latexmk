@@ -1,11 +1,11 @@
 # Fdb version 3
-["biber out/Sablonas"] 1778708586 "out/Sablonas.bcf" "out/Sablonas.bbl" "out/Sablonas" 1778708597
-  "bibliografija.bib" 1778336898 4018 18fcb5555d6458a9eeb9fa16dd073800 ""
-  "out/Sablonas.bcf" 1778708597 107692 5f6c47728e7220a62cbacab5caeed3b0 "lualatex"
+["biber out/Sablonas"] 1778717579 "out/Sablonas.bcf" "out/Sablonas.bbl" "out/Sablonas" 1778721830
+  "bibliografija.bib" 1778717232 2560 298eb87fb86fbd5888fb97719092eb68 ""
+  "out/Sablonas.bcf" 1778721830 106942 ff1ddf63b87360fc7519488978694b22 "lualatex"
   (generated)
   "out/Sablonas.bbl"
   "out/Sablonas.blg"
-["lualatex"] 1778708594 "Sablonas.tex" "Sablonas.pdf" "Sablonas" 1778708597
+["lualatex"] 1778721827 "Sablonas.tex" "Sablonas.pdf" "Sablonas" 1778721830
   "/home/mmss/.texlive2021/texmf-var/luatex-cache/generic/fonts/hb/fonts:Calibri:Calibri-bd.ttf:1" 1778338540 368713 a129cbb5cad1b7bd8ae59556061f5674 ""
   "/home/mmss/.texlive2021/texmf-var/luatex-cache/generic/fonts/hb/fonts:Calibri:Calibri-bi.ttf:1" 1778338540 280629 4026c73a7ee03f86416a708e4b67ddf6 ""
   "/home/mmss/.texlive2021/texmf-var/luatex-cache/generic/fonts/hb/fonts:Calibri:Calibri-it.ttf:1" 1778338540 278456 bc6ceab7605b4a29440e30fd605ce2b0 ""
@@ -211,7 +211,7 @@
   "/var/lib/texmf/tex/generic/config/language.dat.lua" 1778338092 6433 9f697e5af8f8f3d802785c51a7a8cc40 ""
   "/var/lib/texmf/web2c/luahbtex/lualatex.fmt" 1778338097 4555431 52c395b7950d2c86d160d0b656d58ca2 ""
   "LTPlius.sty" 1778336833 5460 532ba38420cb7153d9c9acceaea3a8d6 ""
-  "Sablonas.tex" 1778708543 42411 aeaa1e5876ce28cbd615d67c2a53f45a ""
+  "Sablonas.tex" 1778721820 74119 7eadb20a419360a51c0714e530621f26 ""
   "VUMIFTemplateClass.cls" 1778708536 7580 a6ba7acb0bd27374a799e8985a1d81b1 ""
   "csquotes.cfg" 1778336833 119 a7fcc01665494a20ffcaa0c2d3c8e4cf ""
   "fonts/Calibri/Calibri-bd.ttf" 1778336833 1613668 42a59a6bffb64adb463af2b927753d53 ""
@@ -233,10 +233,10 @@
   "images/ts_bn_on.png" 1778336841 67460 73a159dd45c22eb020efe2958eef264c ""
   "images/ts_confusion.png" 1778336841 66204 117797333b32be74bd5848043ac64bd2 ""
   "images/ts_dropout_p05.png" 1778336841 90586 5ee796fc581dedda42cb326b74fe6284 ""
-  "out/Sablonas.aux" 1778708597 41074 6fb3ee0c6a2f583ca77758e43f3962d8 "lualatex"
-  "out/Sablonas.bbl" 1778708587 15257 bf4244a8e6dc83559a7cf39d40f4ebb8 "biber out/Sablonas"
-  "out/Sablonas.run.xml" 1778708597 2534 c858142c5d2a560208723f51a424bce7 "lualatex"
-  "out/Sablonas.toc" 1778708597 4334 4f0d81bd84ff2d26f2cd144525764b9c "lualatex"
+  "out/Sablonas.aux" 1778721830 34781 5b68a63a9c87a1ede861d49c679d8cb1 "lualatex"
+  "out/Sablonas.bbl" 1778717580 7345 8c20c42b24b811a549c59f506135e8aa "biber out/Sablonas"
+  "out/Sablonas.run.xml" 1778721830 2534 c858142c5d2a560208723f51a424bce7 "lualatex"
+  "out/Sablonas.toc" 1778721830 3682 6fcd2893de8f4d26cd3a31ee45d8dd82 "lualatex"
   "titulinis.tex" 1778706990 1310 c7cfc0e6944b73f3b715c18349b0e3eb ""
   (generated)
   "Sablonas.pdf"
