@@ -30,6 +30,11 @@
 \bibliography{bibliografija}
 %% Bibliografijos stilius nustatytas VUMIFTemplateClass.cls (style=ieee).
 
+%% Lentelės antraštė: "lentelė N. <tekstas>" (vietoj polyglossia numatyto "N lentelė.")
+\makeatletter
+\AtBeginDocument{\def\fnum@table{\tablename\nobreakspace\thetable}}
+\makeatother
+
 % Author's MACROS
 \newcommand{\EE}{\mathbb{E}\,}
 \newcommand{\ee}{{\mathrm e}}
@@ -87,7 +92,7 @@
 
 Vaizdų klasifikavimo užduočiai pasirinktas  „Akmuo--popierius--žirklės“ duomenų rinkinys iš \textit{Kaggle} platformos~\cite{rps_dataset}. Duomenų rinkinį sudaro spalvotos rankos gestų nuotraukos vienodame žaliame fone, sugrupuotos į tris klases: \texttt{paper} (popierius), \texttt{rock} (akmuo) ir \texttt{scissors} (žirklės). Nuotraukų rezoliucija -- \(300{\times}200\) pikselių, RGB.
 
-Klasių dažnio pasiskirstymas pateiktas \ref{tab:rps_kiekiai}~lentelėje. Duomenų rinkinyje yra 2188 nuotraukos, klasės subalansuotos (didžiausias skirtumas tarp klasių -- \(\sim 5{,}3~\%\)), todėl papildomas klasių balansavimas netaikomas.
+Klasių dažnio pasiskirstymas pateiktas lentelėje~\ref{tab:rps_kiekiai}. Duomenų rinkinyje yra 2188 nuotraukos, klasės subalansuotos (didžiausias skirtumas tarp klasių -- \(\sim 5{,}3~\%\)), todėl papildomas klasių balansavimas netaikomas.
 
 \begin{table}[H]
     \centering
@@ -122,47 +127,54 @@ Gaunama 31 skaitinių požymių laiko eilutė vienam slaptažodžio surinkimui. 
 
 \section{Duomenų paruošimas}\label{sec:paruosimas}
 
-Abiem duomenų rinkiniams taikomas tas pats \(80:10:10\) sąntykio padalinimas, kuris realizuotas dviem \texttt{train\_test\_split} kvietimais (pirmas atskiria 20~\% duomenų, antras juos padalina į validavimo ir testavimo aibes po lygiai). Užtikrinama, kad kiekviena aibė išlaikytų panašią klasių proporciją kaip ir originalus rinkinys. Visiems atsitiktinumo šaltiniams (\texttt{random}, \texttt{numpy}, \texttt{tensorflow}) nustatytas vienodas  \(\texttt{SEED} = 42\), todėl rezultatai yra atkuriami.
+Abiem duomenų rinkiniams taikomas tas pats \(80:10:10\) sąntykio padalinimas, kuris realizuotas dviem \texttt{train\_test\_split} kvietimais (pirmas atskiria 20~\% duomenų, antras juos padalina į validavimo ir testavimo aibes po lygiai). Užtikrinama, kad kiekviena aibė išlaikytų panašią klasių proporciją kaip ir originalus rinkinys. Visiems atsitiktinumo šaltiniams (\texttt{random}, \texttt{numpy}, \texttt{tensorflow}) nustatytas vienodas \(\texttt{SEED} = 42\), todėl rezultatai yra atkuriami.
 
-Apibendrinti duomenų aibių dydžiai pateikti \ref{tab:splits}~lentelėje.
+Duomenų aibių dydžiai pateikti lentelėje~\ref{tab:splits}.
 
 \begin{table}[H]
     \centering
-    \caption{Duomenų rinkinių padalinimo rezultatai (santykis 80:10:10, stratifikuotas)}
+    \caption{Duomenų rinkinių padalinimo rezultatai}
     \label{tab:splits}
     \begin{tabular}{|l|c|c|c|c|}
         \hline
         \textbf{Rinkinys} & \textbf{Mokymo aibė} & \textbf{Validavimo aibė} & \textbf{Testavimo aibė} & \textbf{Iš viso}\\
         \hline
-        Vaizdai (RPS)    & 1750 & 219 & 219 & 2188 \\
+        Vaizdai    & 1750 & 219 & 219 & 2188 \\
         \hline
-        Laiko eilutės (CMU) & 1200 & 150  & 150  & 1500 \\
+        Laiko eilutės & 1200 & 150  & 150  & 1500 \\
         \hline
     \end{tabular}
 \end{table}
 
 \subsection{Vaizdų paruošimas}
 
-Vaizdai į atmintį įkraunami funkcija \texttt{tf.keras.utils.load\_img}, kuri kiekvieną vaizdą sumažina iki vienodos rezoliucijos \(128 \times 128\) pikselių. Originali \(300 \times 200\) raiška buvo sumažinta dviem priežastimis: (a) modelių mokymas vyksta CPU režimu, todėl reikia kontroliuoti atminties ir laiko sąnaudas; (b) gestų atpažinimui užtenka mažesnės raiškos -- klasės skiriasi pagal aiškiai atpažįstamas formas, ne smulkias detales. Pikselių reikšmės normalizuojamos į intervalą \([0; 1]\) padalinant iš \(255\), todėl modelio įvedimas yra vienetinio masto plūstančio kablelio tensorius (\texttt{float32}).
+Vaizdai į atmintį įkraunami funkcija \texttt{tf.keras.utils.load\_img}, kuri kiekvieną vaizdą sumažina iki vienodos rezoliucijos \(128 \times 128\) pikselių. Originali \(300 \times 200\) raiška buvo sumažinta dėl dviejų priežasčių: modelių mokymas vyksta naudojant procesorių (toliau --- CPU), todėl reikia riboti atminties ir laiko sąnaudas; gestų atpažinimui užtenka mažesnės raiškos -- klasės skiriasi pagal aiškiai atpažįstamas formas, ne smulkias detales. Pikselių reikšmės normalizuojamos į intervalą \([0; 1]\) padalinant iš \(255\), todėl CNN modelio įvestis yra (\texttt{float32}) tensorius (4D masyvas).
 
-Visi vaizdai apjungiami į keturmatį tensorių formato \((N, 128, 128, 3)\), tinkamą \texttt{Conv2D} sluoksniui (žr. žemiau pateiktą kodo fragmentą).
+Visi vaizdai apjungiami į keturmačio masyvo formatą \((N, 128, 128, 3)\), tinkamą \texttt{Conv2D} sluoksniui.
 
 \begin{verbatim}
-# Iš trimačių masyvų sąrašo gaunamas keturmatis tensorius (N x H x W x 3)
 X = np.asarray(X, dtype=np.float32)
 y = np.asarray(y, dtype=np.int64)
 \end{verbatim}
 
 \subsection{Laiko eilučių paruošimas}
 
-CMU duomenys įkraunami iš CSV failo (\texttt{pandas.read\_csv}). Atfiltruojami pirmieji 30 dalyvių ir tik pirmoji sesija. Tekstiniai dalyvių identifikatoriai paverčiami sveikaisiais skaičiais \texttt{LabelEncoder} pagalba. Po šios operacijos turimas dvimatis matricos formato pavidalas \((N, 31)\), kuriame eilutė atitinka vieną slaptažodžio surinkimą.
+CMU duomenys įkraunami iš CSV failo (\texttt{pandas.read\_csv}). Atfiltruojami pirmieji 30 dalyvių ir tik pirmoji sesija. Duomenys saugomi dvimačio masyvo pavidalu \((N, 31)\), kuriame eilutė atitinka vieną slaptažodžio surinkimą.
 
-\texttt{Conv1D} sluoksniui reikia tensoriaus \((N, L, C)\), kur \(L\) -- sekos ilgis, o \(C\) -- kanalų skaičius, todėl pridedama tuščia kanalų ašis (\texttt{X[..., np.newaxis]}). Galutinė įvedimo forma -- \((N, 31, 1)\). Kadangi skirtingi laiko požymiai turi skirtingą skalę (milisekundžių eilės dydžius), atliekamas standartizavimas (vidurkis 0, standartinis nuokrypis 1). Standartizavimo statistikos (\(\mu, \sigma\)) skaičiuojamos \emph{tik} iš mokymo aibės ir tada taikomos validavimo bei testavimo aibėms -- taip išvengiama testavimo informacijos ,,nutekėjimo“ į mokymo procesą.
+\texttt{Conv1D} sluoksniui reikia \((N, L, C)\) tensoriaus formato, kur \(L\) -- sekos ilgis, o \(C\) -- kanalų skaičius, todėl pridedama tuščia kanalų ašis (\texttt{X[..., np.newaxis]}). Galutinė įvesties forma -- \((N, 31, 1)\). Kadangi skirtingi laiko požymiai turi skirtingą skalę, atliekamas standartizavimas (vidurkis 0, standartinis nuokrypis 1). Standartizavimo statistikos (\(\mu, \sigma\)) skaičiuojamos tik iš mokymo aibės ir tada taikomos validavimo bei testavimo aibėms.
+
+\begin{verbatim}
+mean = X_tr.mean(axis=(0, 2), keepdims=True)
+std  = X_tr.std(axis=(0, 2), keepdims=True) + 1e-8
+X_tr = (X_tr - mean) / std
+X_va = (X_va - mean) / std
+X_te = (X_te - mean) / std
+\end{verbatim}
 
 
 \section{Skaičiavimo resursai}\label{sec:resursai}
 
-Visi eksperimentai atlikti viename asmeniniame nešiojamajame kompiuteryje, naudojant tik centrinį procesorių (CPU). Pagrindinės charakteristikos pateiktos \ref{tab:hw}~lentelėje.
+Visi eksperimentai atlikti asmeniniame nešiojamajame kompiuteryje, naudojant tik CPU. Pagrindinės specifikacijos pateiktos lentelėje~\ref{tab:hw}.
 
 \begin{table}[H]
     \centering
@@ -172,13 +184,11 @@ Visi eksperimentai atlikti viename asmeniniame nešiojamajame kompiuteryje, naud
         \hline
         \textbf{Komponentas} & \textbf{Specifikacija}\\
         \hline
-        Centrinis procesorius (CPU) & Intel Core i7-11800H (8 fiziniai / 16 loginių branduolių, iki 4{,}6 GHz)\\
+        Centrinis procesorius (CPU) & Intel Core i7-11800H (8 fiziniai / 16 loginiai branduoliai, iki 4{,}6 GHz)\\
         \hline
         Operatyvioji atmintis (RAM) & 16 GB DDR4\\
         \hline
-        Grafinis procesorius (GPU)  & nenaudotas (treniruojama CPU režimu)\\
-        \hline
-        Operacinė sistema           & Linux (WSL2 ant Windows 11)\\
+        Operacinė sistema           & Linux (WSL po Windows 11)\\
         \hline
         Programinė aplinka          & Python 3.12, TensorFlow 2.21, Keras 3.12\\
         \hline
@@ -192,36 +202,13 @@ Kadangi GPU nenaudojamas, atminties ir laiko sąnaudos buvo apribotos pasirenkan
 
 \subsection{Bendra architektūros schema}
 
-Visi šiame darbe naudojami modeliai sukurti \texttt{Keras}~\cite{keras_docs} \texttt{Sequential} API ir turi tą pačią parametrizuojamą struktūrą. Tinklą sudaro viena ar kelios konvoliucinių blokų pakopos ir paskui einanti tankiai sujungtų sluoksnių pakopa, kaip parodyta \ref{alg:CNN}~algoritme.
+Visi šiame darbe naudojami modeliai sukurti \texttt{Keras}~\cite{keras_docs} \texttt{Sequential} API ir turi tą pačią parametrizuojamą struktūrą. Tinklą sudaro vienas ar keli konvoliucinių blokų sluoksniai ir paskui einanti tankiai sujungtų sluoksnių pakopa.
 
-\begin{algorithm}[h]
-\caption{Bendra darbe naudojamų CNN modelių schema}\label{alg:CNN}
-\begin{algorithmic}[1]
-    \STATE \textbf{Įvedimas:} tensorius \((H \times W \times 3)\) (vaizdams) arba \((L \times 1)\) (laiko eilutėms)
-    \FOR{kiekvienam konvoliuciniam blokui}
-        \STATE \texttt{Conv2D} arba \texttt{Conv1D} (filtrai, branduolio dydis, \textit{padding="same"})
-        \STATE (jei įjungta) \texttt{BatchNormalization}
-        \STATE aktyvacija (ReLU / tanh / ELU / Leaky ReLU)
-        \STATE (jei \(pool > 1\)) \texttt{MaxPooling2D} arba \texttt{MaxPooling1D}
-        \STATE (jei \(p > 0\)) \texttt{Dropout(p)}
-    \ENDFOR
-    \STATE \texttt{Flatten} -- konvoliucijų išvedimo paviršių paverčia į vienmatį vektorių
-    \FOR{kiekvienam tankiajam sluoksniui}
-        \STATE \texttt{Dense}(neuronų skaičius)
-        \STATE (jei įjungta) \texttt{BatchNormalization}
-        \STATE aktyvacija
-        \STATE (jei \(p > 0\)) \texttt{Dropout(p)}
-    \ENDFOR
-    \STATE \textbf{Išvedimas:} \texttt{Dense}(klasių skaičius, \textit{softmax})
-    \STATE Kompiliavimas: \(\text{loss} = \) sparse\_categorical\_crossentropy, optimizatorius -- pasirenkamas
-\end{algorithmic}
-\end{algorithm}
-
-Toks parametrizuotas modelio formavimas leidžia keisti tinklo gylį, branduolio dydį, filtrų skaičių, dropout tikimybę ir kitus dydžius vien tik per konfigūracijos žodyną, neperrašant paties modelio kodo.
+Parametrizuotas modelio implementavimas leidžia lengvai keisti tinklo gylį, branduolio dydį, filtrų skaičių, dropout tikimybę ir kitus dydžius.
 
 \subsection{Hiperparametrų ribos}
 
-Eksperimentų metu varijuoti dydžiai apibendrinti \ref{tab:hp}~lentelėje. Tam tikrose eksperimentų grupėse (architektūrų palyginimas, dropout, BN, aktyvacijos, optimizatorius) keičiamas tik vienas dydis vienu metu, kiti palaikomi pastovūs.
+Eksperimentų metu varijuoti dydžiai pateikiami lentelėje~\ref{tab:hp}.
 
 \begin{table}[H]
     \centering
@@ -244,11 +231,11 @@ Eksperimentų metu varijuoti dydžiai apibendrinti \ref{tab:hp}~lentelėje. Tam 
     \end{tabular}
 \end{table}
 
-Pasirinkta nuostolių funkcija \texttt{sparse\_categorical\_crossentropy} -- klasikinis daugiaklasės klasifikacijos pasirinkimas, kai klasės žymimos sveikaisiais skaičiais (be \textit{one-hot} kodavimo). Optimizavimo metu minimizuojamas tikrosios klasės log-tikimybės neigiamas vidurkis paketo įrašuose~\cite{kingma2015adam}.
+Pasirinkta nuostolių funkcija \texttt{sparse\_categorical\_crossentropy}. Tai klasikinis daugiaklasės klasifikacijos pasirinkimas. \texttt{ChatGPT}
 
 \subsection{Tirtos architektūros}
 
-Pagal užduoties reikalavimą lyginamos trys skirtingo gylio architektūros (\ref{tab:archs}). Kiekviena turi vis daugiau konvoliucinių blokų ir tankių sluoksnių; pradinė hipotezė -- gilesnis tinklas geriau atspindi sudėtingesnius požymius, bet rizikuoja persimokyti.
+Lyginamos trys skirtingo gylio architektūros (žr. lentelę~\ref{tab:archs}). Kiekviena turi vis daugiau konvoliucinių blokų ir tankių sluoksnių; Hipotezė --- gilesnis tinklas geriau atspindi sudėtingesnius požymius, bet rizikuoja persimokyti.
 
 \begin{table}[H]
     \centering
@@ -267,14 +254,14 @@ Pagal užduoties reikalavimą lyginamos trys skirtingo gylio architektūros (\re
     \end{tabular}
 \end{table}
 
-Laiko eilučių atveju paskutinio (-ių) konvoliucinio (-ių) bloko \textit{pooling} dydis sumažintas iki 1 -- iš pradžių sekos ilgis tik 31, ir per daug \textit{max-pooling} sluoksnių išnaikina visą informaciją.
+Laiko eilučių atveju, paskutiniame konvoliuciniame bloke \texttt{pool=1} (pooling sluoksnis praleidžiamas), nes pradinis sekos ilgis tik 31 ir keturi \texttt{pool=2} sluoksniai sunaikintų laiko struktūrą.
 
 
 \section{Programinis kodas}\label{sec:kodas}
 
 \subsection{Naudoti įrankiai ir bibliotekos}
 
-Programinis kodas parašytas Python 3 kalba. Pagrindinės bibliotekos pateiktos \ref{tab:libs}~lentelėje.
+Programinis kodas parašytas Python programavimo kalba. Pagrindinės bibliotekos pateiktos lentelėje~\ref{tab:libs}.
 
 \begin{table}[H]
     \centering
@@ -294,11 +281,9 @@ Programinis kodas parašytas Python 3 kalba. Pagrindinės bibliotekos pateiktos 
     \end{tabular}
 \end{table}
 
-Programa suskirstyta į du modulius: \texttt{main.py} -- vaizdų klasifikavimui (Conv2D), \texttt{main\_ts.py} -- laiko eilutėms (Conv1D). Abiejų modulių pagrindinė struktūra simetriška: duomenų įkrovimas $\rightarrow$ stratifikuotas padalinimas $\rightarrow$ modelio kūrimo funkcija $\rightarrow$ eksperimentų kilpa $\rightarrow$ rezultatų išsaugojimas (\texttt{summary.csv}, mokymo kreivių grafikai PNG, painiavos matrica geriausiajam modeliui).
+Programa suskirstyta į du modulius: \texttt{main.py} vaizdų klasifikavimui (Conv2D), \texttt{main\_ts.py} laiko eilutėms (Conv1D). Abiejų modulių pagrindinė struktūra identiška: duomenų įkrovimas $\rightarrow$ 80:10:10 padalinimas $\rightarrow$ modelio kūrimo funkcija $\rightarrow$ eksperimentai $\rightarrow$ rezultatų išsaugojimas (\texttt{summary.csv}, mokymo kreivių grafikai, \texttt{confusion matrix} geriausiajam modeliui).
 
-\subsection{Pagrindinės funkcijos}
-
-\subsubsection{Modelio konstravimas pagal konfigūraciją}
+\subsection{Modelio konstravimas pagal konfigūraciją}
 
 Funkcija \texttt{build\_model} paima žodyną \texttt{cfg}, kuris aprašo blokų sąrašą, tankius sluoksnius, optimizatorių, dropout tikimybes ir kt. Tai leidžia tarp eksperimentų keisti tinklo struktūrą be dubliavimo. Sutrumpintas pavyzdys:
 
@@ -317,41 +302,15 @@ def build_model(cfg, input_shape, num_classes):
             model.add(layers.MaxPooling2D(pool_size=blk["pool"]))
         if blk.get("dropout", 0.0) > 0.0:
             model.add(layers.Dropout(blk["dropout"]))
-    model.add(layers.Flatten())  # ChatGPT pasiūlytas perėjimas Conv->Dense
+    model.add(layers.Flatten())
     ...
     model.add(layers.Dense(num_classes, activation="softmax"))
     return model
 \end{verbatim}
 
-\textit{DI naudojimo deklaracija (1):} Eilutė su \texttt{layers.Flatten()} ir komentaras dėl perėjimo iš keturmačio konvoliucinių sluoksnių išvedimo į vienmatę tankaus sluoksnio įvestį buvo paaiškinta naudojant ChatGPT\cite{chatgpt_flatten} -- šis fragmentas pasitarnavo kaip mokymosi priemonė, o ne kaip nukopijuotas kodas. Visa likusi modelio konfigūracijos logika (žodyno schema, parametrų reikšmės, sąlyginis BN/Dropout pridėjimas) parašyta autoriaus.
-
-\subsubsection{Vaizdų įkrovimas ir keturmatis tensorius}
-
-Funkcijoje \texttt{load\_images} kiekvienas RPS rinkinio failas įkraunamas, normalizuojamas ir įdedamas į Python sąrašą; pabaigoje sąrašas paverčiamas į NumPy masyvą:
-
-\begin{verbatim}
-X = np.asarray(X, dtype=np.float32)  # 3D masyvų sąrašas -> 4D tensorius
-y = np.asarray(y, dtype=np.int64)
-\end{verbatim}
-
-\textit{DI naudojimo deklaracija (2):} Tai, kad iš trimačių masyvų sąrašo automatiškai gaunamas keturmatis tensorius \((N, H, W, 3)\), buvo patvirtinta užklausus ChatGPT\cite{chatgpt_numpy}. Konkretus iškvietimas (\texttt{np.asarray}) nurodytas autoriaus, AI tik paaiškino mechanizmą.
-
-\subsubsection{Eksperimentų kilpa ir rezultatų saugojimas}
-
-Funkcijos \texttt{architecture\_configs} ir \texttt{hp\_configs\_for} grąžina konfigūracijų sąrašus skirtingoms eksperimentų grupėms. Pagrindinė kilpa kviečia \texttt{run\_experiment}, kuris apmoko modelį, įvertina jį ant trijų aibių ir pridėdamas eilutę į \texttt{summary.csv}. Šis dizainas leidžia atnaujinti tik vieną eksperimentą iš naujo nepradedant viso ciklo.
-
-\subsubsection{Geriausio modelio vertinimas ir 30 pavyzdžių}
-
-Funkcija \texttt{evaluate\_best} apskaičiuoja painiavos matricą per \texttt{sklearn.metrics.confusion\_matrix}, išsaugo CSV ir PNG variantus, taip pat parenka po 10 (vaizdams) arba po 1 (laiko eilutėms) pavyzdį iš kiekvienos klasės iš testavimo aibės -- iš viso $\sim$30. Pavyzdžiams skaičiuojamos modelio prognozės ir surašomos į \texttt{sample\_predictions.csv}.
-
-\subsection{Apibendrinimas dėl DI įrankių naudojimo}
-
-Pagal užduoties reikalavimus, dirbtinio intelekto įrankiai (ChatGPT~\cite{chatgpt_bendrai}) naudoti tik atskiroms idėjų patikroms ir pavienių sintaksinių konstrukcijų paaiškinimui (žr. nuorodas prie konkrečių fragmentų). Visa programos struktūra, eksperimentų logika, hiperparametrų pasirinkimas ir rezultatų analizė atlikti autoriaus. Visas pilnas šaltinio tekstas pateikiamas \ref{app:main} ir \ref{app:mainTs}~prieduose.
-
-
 \section{Tyrimo rezultatai}\label{sec:tyrimas}
 
-Šiame skyriuje pateikiami eksperimentų rezultatai. Visos lentelėse esančios reikšmės -- iš programos sugeneruotų santraukos failų \texttt{rezultatai/images/summary.csv} ir \texttt{rezultatai/timeseries/summary.csv}. Mokymo kreivių (paklaida ir tikslumas pagal epochas) grafikai pateikiami atskiruose paveikslėliuose.
+Šiame skyriuje pateikiami eksperimentų rezultatai iš \texttt{summary.csv}. Taip pat pateikiami mokymo kreivių (paklaida ir tikslumas pagal epochas) grafikai.
 
 \subsection{Vaizdų klasifikavimo eksperimentai}
 
@@ -395,7 +354,7 @@ Pagal užduoties reikalavimus, dirbtinio intelekto įrankiai (ChatGPT~\cite{chat
     \label{fig:img_arch_large}
 \end{figure}
 
-Visos trys architektūros pasiekia 100~\% mokymo tikslumą, o validavimo ir testavimo aibėse skiriasi tik nedaug. \texttt{arch\_medium} pasiekia geriausią validavimo tikslumą (\(1{,}0000\)) ir geriausią testavimo tikslumą kartu su \texttt{arch\_large}. Tolesniems hiperparametrų tyrimams pasirinkta \texttt{arch\_medium}, nes tai paprasčiausia iš dviejų geriausių (mažiau parametrų $\rightarrow$ greitesnis mokymas).
+Visos trys architektūros pasiekia 100~\% mokymo tikslumą, o validavimo ir testavimo aibėse skiriasi tik nedaug. \texttt{arch\_medium} pasiekia geriausią validavimo tikslumą (\(1{,}0000\)) ir geriausią testavimo tikslumą kartu su \texttt{arch\_large}. Tolesniems hiperparametrų tyrimams pasirinkta \texttt{arch\_medium}, nes tai paprastesnė iš dviejų geriausių.
 
 \subsubsection{Išmetimo (\textit{dropout}) sluoksnio įtaka}
 
@@ -405,15 +364,15 @@ Visos trys architektūros pasiekia 100~\% mokymo tikslumą, o validavimo ir test
     \label{tab:img_dropout}
     \begin{tabular}{|l|c|c|c|c|}
         \hline
-        \textbf{Eksperimentas} & \textbf{val\_acc} & \textbf{test\_acc} & \textbf{val\_loss} & \textbf{test\_loss}\\
+        \textbf{Eksperimentas} & \textbf{train\_acc} & \textbf{val\_acc} & \textbf{train\_loss} & \textbf{val\_loss}\\
         \hline
-        \texttt{dropout\_p0.0}              & 1{,}0000 & 0{,}9863 & 0{,}0036 & 0{,}1083\\
+        \texttt{dropout\_p0.0}              & 1{,}0000 & 1{,}0000 & 3$\cdot 10^{-5}$ & 0{,}0036\\
         \hline
-        \texttt{dropout\_p0.25}             & 0{,}9726 & 0{,}9726 & 0{,}0898 & 0{,}1701\\
+        \texttt{dropout\_p0.25}             & 1{,}0000 & 0{,}9726 & 0{,}0005 & 0{,}0898\\
         \hline
-        \texttt{dropout\_p0.5}              & 0{,}9543 & 0{,}9315 & 0{,}1902 & 0{,}3053\\
+        \texttt{dropout\_p0.5}              & 0{,}9817 & 0{,}9543 & 0{,}0505 & 0{,}1902\\
         \hline
-        \texttt{dropout\_dense\_only\_0.5}  & 0{,}9863 & 0{,}9772 & 0{,}0567 & 0{,}1227\\
+        \texttt{dropout\_dense\_only\_0.5}  & 1{,}0000 & 0{,}9863 & 0{,}0006 & 0{,}0567\\
         \hline
     \end{tabular}
 \end{table}
@@ -432,7 +391,7 @@ Visos trys architektūros pasiekia 100~\% mokymo tikslumą, o validavimo ir test
     \label{fig:img_dropout_p05}
 \end{figure}
 
-Ant santykinai paprasto vaizdų rinkinio modelis nepatiria didelio persimokymo, todėl agresyvus \textit{dropout} (\(p = 0{,}5\)) reikšmingai blogina ir validavimo (\(0{,}9543\)), ir testavimo (\(0{,}9315\)) tikslumą bei padidina paklaidą daugiau nei dvigubai~\cite{srivastava2014dropout}. Vidutinis \(p = 0{,}25\) taip pat šiek tiek blogina rezultatus. Geriausia šiam uždaviniui -- \(p = 0\); aukšto \textit{dropout} taikymas tik tankiems sluoksniams (\texttt{dense\_only\_0.5}) yra kompromisas, kuris išlaiko 97~\% testavimo tikslumą.
+Mokantis ant paprastų vaizdų rinkinio modelis nepatiria didelio persimokymo, todėl agresyvus \textit{dropout} (\(p = 0{,}5\)) reikšmingai sumažina mokymo tikslumą (\(0{,}9817\)) ir blogina validavimo tikslumą (\(0{,}9543\)) bei padidina validavimo paklaidą daugiau nei dvigubai. Vidutinis \(p = 0{,}25\) taip pat šiek tiek blogina validavimo rezultatus. Geriausia šiam uždaviniui \(p = 0\) -- pasiekia tobulą tikslumą; aukšto \textit{dropout} taikymas tik tankiems sluoksniams (\texttt{dense\_only\_0.5}) yra kompromisas, kuris išlaiko 98{,}63~\% validavimo tikslumą.
 
 \subsubsection{Paketų normalizavimo (BN) įtaka}
 
@@ -442,11 +401,11 @@ Ant santykinai paprasto vaizdų rinkinio modelis nepatiria didelio persimokymo, 
     \label{tab:img_bn}
     \begin{tabular}{|l|c|c|c|c|}
         \hline
-        \textbf{Eksperimentas} & \textbf{val\_acc} & \textbf{test\_acc} & \textbf{val\_loss} & \textbf{test\_loss}\\
+        \textbf{Eksperimentas} & \textbf{train\_acc} & \textbf{val\_acc} & \textbf{train\_loss} & \textbf{val\_loss}\\
         \hline
-        \texttt{bn\_off} (be BN) & 1{,}0000 & 0{,}9863 & 0{,}0036 & 0{,}1083\\
+        \texttt{bn\_off} (be BN) & 1{,}0000 & 1{,}0000 & 3$\cdot 10^{-5}$ & 0{,}0036\\
         \hline
-        \texttt{bn\_on}  (su BN) & 1{,}0000 & 0{,}9817 & 0{,}0047 & 0{,}0439\\
+        \texttt{bn\_on}  (su BN) & 1{,}0000 & 1{,}0000 & 0{,}0002 & 0{,}0047\\
         \hline
     \end{tabular}
 \end{table}
@@ -458,7 +417,7 @@ Ant santykinai paprasto vaizdų rinkinio modelis nepatiria didelio persimokymo, 
     \label{fig:img_bn_on}
 \end{figure}
 
-Paketų normalizavimas~\cite{ioffe2015batch} testavimo paklaidą sumažina daugiau nei dvigubai (\(0{,}1083 \rightarrow 0{,}0439\)), bet tikslumo procentas išlieka praktiškai toks pat (\(\sim 98~\%\)). Tai rodo, kad BN padeda ,,sutelkti“ sprendimo tikimybes, net jei klaidingų klasifikacijų skaičius nekinta.
+Paketų normalizavimas validavimo aibėje tikslumo praktiškai nekeičia (abu pasiekia \(1{,}0000\)), tačiau šiek tiek padidina mokymo bei validavimo paklaidą. Šiame paprastame uždavinyje BN pridėtinės naudos neduoda -- modelis ir be jos konverguoja iki tobulo validavimo tikslumo per 20 epochų.
 
 \subsubsection{Aktyvacijos funkcijos įtaka}
 
@@ -468,15 +427,15 @@ Paketų normalizavimas~\cite{ioffe2015batch} testavimo paklaidą sumažina daugi
     \label{tab:img_act}
     \begin{tabular}{|l|c|c|c|c|}
         \hline
-        \textbf{Aktyvacija} & \textbf{val\_acc} & \textbf{test\_acc} & \textbf{val\_loss} & \textbf{test\_loss}\\
+        \textbf{Aktyvacija} & \textbf{train\_acc} & \textbf{val\_acc} & \textbf{train\_loss} & \textbf{val\_loss}\\
         \hline
-        ReLU         & 1{,}0000 & 0{,}9863 & 0{,}0036 & 0{,}1083\\
+        ReLU         & 1{,}0000 & 1{,}0000 & 3$\cdot 10^{-5}$ & 0{,}0036\\
         \hline
-        tanh         & 0{,}9954 & 0{,}9726 & 0{,}0133 & 0{,}0937\\
+        tanh         & 1{,}0000 & 0{,}9954 & 0{,}0012 & 0{,}0133\\
         \hline
-        ELU          & 0{,}9909 & 0{,}9635 & 0{,}0446 & 0{,}1809\\
+        ELU          & 1{,}0000 & 0{,}9909 & 0{,}0002 & 0{,}0446\\
         \hline
-        Leaky ReLU   & 0{,}9954 & 0{,}9772 & 0{,}0166 & 0{,}1278\\
+        Leaky ReLU   & 1{,}0000 & 0{,}9954 & 3$\cdot 10^{-5}$ & 0{,}0166\\
         \hline
     \end{tabular}
 \end{table}
@@ -491,20 +450,20 @@ ReLU pasiekia geriausią validavimo tikslumą; Leaky ReLU ir tanh -- nedaug pras
     \label{tab:img_opt}
     \begin{tabular}{|l|c|c|c|c|}
         \hline
-        \textbf{Optimizatorius} & \textbf{val\_acc} & \textbf{test\_acc} & \textbf{val\_loss} & \textbf{test\_loss}\\
+        \textbf{Optimizatorius} & \textbf{train\_acc} & \textbf{val\_acc} & \textbf{train\_loss} & \textbf{val\_loss}\\
         \hline
-        Adam     & 1{,}0000 & 0{,}9863 & 0{,}0036 & 0{,}1083\\
+        Adam     & 1{,}0000 & 1{,}0000 & 3$\cdot 10^{-5}$ & 0{,}0036\\
         \hline
-        SGD      & 0{,}9909 & 0{,}9315 & 0{,}0345 & 0{,}1702\\
+        SGD      & 0{,}9903 & 0{,}9909 & 0{,}0287 & 0{,}0345\\
         \hline
-        RMSprop  & 1{,}0000 & 0{,}9817 & 0{,}0473 & 0{,}1420\\
+        RMSprop  & 1{,}0000 & 0{,}9817 & \(\approx 0\) & 0{,}0473\\
         \hline
-        AdamW    & 1{,}0000 & 0{,}9726 & 0{,}0035 & 0{,}1179\\
+        AdamW    & 1{,}0000 & 1{,}0000 & 3$\cdot 10^{-5}$ & 0{,}0035\\
         \hline
     \end{tabular}
 \end{table}
 
-Adaptacinio mokymosi greičio optimizatoriai (Adam, RMSprop, AdamW) duoda labai panašius rezultatus -- visi pasiekia tobulą validavimo tikslumą. SGD su tuo pačiu mokymosi greičiu \(\eta = 10^{-3}\) ir \texttt{momentum} = 0{,}9 yra šiek tiek per lėtas konverguoti per 20 epochų, todėl jo testavimo tikslumas atsilieka.
+Adaptacinio mokymosi greičio optimizatoriai (Adam, RMSprop, AdamW) duoda labai panašius rezultatus -- visi pasiekia tobulą arba beveik tobulą validavimo tikslumą. SGD su tuo pačiu mokymosi greičiu \(\eta = 10^{-3}\) ir \texttt{momentum} = 0{,}9 yra šiek tiek per lėtas konverguoti per 20 epochų, todėl jo mokymo tikslumas atsilieka (\(0{,}9903\)).
 
 \subsection{Laiko eilučių klasifikavimo eksperimentai}
 
@@ -558,15 +517,15 @@ Skirtingai nuo vaizdų, visų trijų architektūrų testavimo tikslumas išlieka
     \label{tab:ts_dropout}
     \begin{tabular}{|l|c|c|c|c|}
         \hline
-        \textbf{Eksperimentas} & \textbf{val\_acc} & \textbf{test\_acc} & \textbf{val\_loss} & \textbf{test\_loss}\\
+        \textbf{Eksperimentas} & \textbf{train\_acc} & \textbf{val\_acc} & \textbf{train\_loss} & \textbf{val\_loss}\\
         \hline
-        \texttt{dropout\_p0.0}              & 0{,}9400 & 0{,}8600  & 1{,}2666 & 0{,}8862\\
+        \texttt{dropout\_p0.0}              & 1{,}0000 & 0{,}9400 & 0{,}0003 & 1{,}2666\\
         \hline
-        \texttt{dropout\_p0.25}             & 0{,}9400 & 0{,}9067  & 0{,}3771 & 0{,}4491\\
+        \texttt{dropout\_p0.25}             & 0{,}9992 & 0{,}9400 & 0{,}0051 & 0{,}3771\\
         \hline
-        \texttt{dropout\_p0.5}              & 0{,}9267 & 0{,}8867  & 0{,}3479 & 0{,}4381\\
+        \texttt{dropout\_p0.5}              & 0{,}9742 & 0{,}9267 & 0{,}1588 & 0{,}3479\\
         \hline
-        \texttt{dropout\_dense\_only\_0.5}  & 0{,}9333 & 0{,}9067  & 0{,}2485 & 0{,}3986\\
+        \texttt{dropout\_dense\_only\_0.5}  & 1{,}0000 & 0{,}9333 & 0{,}0025 & 0{,}2485\\
         \hline
     \end{tabular}
 \end{table}
@@ -578,7 +537,7 @@ Skirtingai nuo vaizdų, visų trijų architektūrų testavimo tikslumas išlieka
     \label{fig:ts_dropout_p05}
 \end{figure}
 
-Skirtingai nuo vaizdų atvejo, čia \textit{dropout} pridėjimas reikšmingai sumažina testavimo paklaidą (nuo \(0{,}886\) iki \(\sim 0{,}40\)) ir nepablogina arba net pagerina testavimo tikslumą iki \(\sim 91~\%\). Tai dera su atrastu persimokymo paveikslu -- regularizacija šiame uždavinyje yra reikalinga.
+Skirtingai nuo vaizdų atvejo, čia \textit{dropout} pridėjimas reikšmingai sumažina validavimo paklaidą (nuo \(1{,}2666\) iki \(\sim 0{,}25\)--\(0{,}38\)), išlaikant panašų validavimo tikslumą (\(\sim 93\)--\(94~\%\)). Tai dera su matomu persimokymu -- regularizacija šiame uždavinyje yra reikalinga.
 
 \subsubsection{Paketų normalizavimo įtaka}
 
@@ -588,11 +547,11 @@ Skirtingai nuo vaizdų atvejo, čia \textit{dropout} pridėjimas reikšmingai su
     \label{tab:ts_bn}
     \begin{tabular}{|l|c|c|c|c|}
         \hline
-        \textbf{Eksperimentas} & \textbf{val\_acc} & \textbf{test\_acc} & \textbf{val\_loss} & \textbf{test\_loss}\\
+        \textbf{Eksperimentas} & \textbf{train\_acc} & \textbf{val\_acc} & \textbf{train\_loss} & \textbf{val\_loss}\\
         \hline
-        \texttt{bn\_off} (be BN) & 0{,}9400 & 0{,}8600 & 1{,}2666 & 0{,}8862\\
+        \texttt{bn\_off} (be BN) & 1{,}0000 & 0{,}9400 & 0{,}0003 & 1{,}2666\\
         \hline
-        \texttt{bn\_on}  (su BN) & 0{,}9400 & 0{,}9333 & 0{,}2433 & 0{,}2105\\
+        \texttt{bn\_on}  (su BN) & 1{,}0000 & 0{,}9400 & 0{,}0013 & 0{,}2433\\
         \hline
     \end{tabular}
 \end{table}
@@ -604,7 +563,7 @@ Skirtingai nuo vaizdų atvejo, čia \textit{dropout} pridėjimas reikšmingai su
     \label{fig:ts_bn_on}
 \end{figure}
 
-Šiame uždavinyje BN turi didžiausią poveikį iš visų hiperparametrų: testavimo tikslumas padidėja nuo \(86~\%\) iki \(93{,}33~\%\), o testavimo paklaida sumažėja daugiau nei keturis kartus. BN ne tik stabilizuoja gradientus, bet ir veikia kaip lengva regularizacija (per paketo statistikų triukšmą).
+Šiame uždavinyje BN turi didžiausią poveikį iš visų hiperparametrų: validavimo paklaida sumažėja daugiau nei penkis kartus (\(1{,}2666 \rightarrow 0{,}2433\)), nors validavimo tikslumas išlieka toks pat (\(0{,}9400\)). BN ne tik stabilizuoja gradientus, bet ir veikia kaip lengva regularizacija (per paketo statistikų triukšmą).
 
 \subsubsection{Aktyvacijos funkcijos įtaka}
 
@@ -614,20 +573,20 @@ Skirtingai nuo vaizdų atvejo, čia \textit{dropout} pridėjimas reikšmingai su
     \label{tab:ts_act}
     \begin{tabular}{|l|c|c|c|c|}
         \hline
-        \textbf{Aktyvacija} & \textbf{val\_acc} & \textbf{test\_acc} & \textbf{val\_loss} & \textbf{test\_loss}\\
+        \textbf{Aktyvacija} & \textbf{train\_acc} & \textbf{val\_acc} & \textbf{train\_loss} & \textbf{val\_loss}\\
         \hline
-        ReLU         & 0{,}9400 & 0{,}8600 & 1{,}2666 & 0{,}8862\\
+        ReLU         & 1{,}0000 & 0{,}9400 & 0{,}0003 & 1{,}2666\\
         \hline
-        tanh         & 0{,}9333 & 0{,}9000 & 0{,}2593 & 0{,}2926\\
+        tanh         & 1{,}0000 & 0{,}9333 & 0{,}0017 & 0{,}2593\\
         \hline
-        ELU          & 0{,}9267 & 0{,}8667 & 1{,}1452 & 0{,}7553\\
+        ELU          & 1{,}0000 & 0{,}9267 & 0{,}0002 & 1{,}1452\\
         \hline
-        Leaky ReLU   & 0{,}9200 & 0{,}8733 & 0{,}9553 & 0{,}8047\\
+        Leaky ReLU   & 1{,}0000 & 0{,}9200 & 0{,}0003 & 0{,}9553\\
         \hline
     \end{tabular}
 \end{table}
 
-Įdomu, kad tanh aktyvacija šiame uždavinyje smarkiai sumažina paklaidą (\(0{,}29\) prieš \(0{,}89\) su ReLU), nepaisant jos atviros gradiento išnykimo problemos giliuose tinkluose. Tai gali būti susiję su tuo, kad standartizuoti įvedimo požymiai (vidurkis 0, dispersija 1) yra ribose, kuriose tanh elgiasi panašiai į linijinį atvaizdavimą.
+Įdomu, kad tanh aktyvacija šiame uždavinyje smarkiai sumažina validavimo paklaidą (\(0{,}2593\) prieš \(1{,}2666\) su ReLU), nepaisant jos atviros gradiento išnykimo problemos giliuose tinkluose. Tai gali būti susiję su tuo, kad standartizuoti įvedimo požymiai (vidurkis 0, dispersija 1) yra ribose, kuriose tanh elgiasi panašiai į linijinį atvaizdavimą.
 
 \subsubsection{Optimizavimo algoritmo įtaka}
 
@@ -637,20 +596,20 @@ Skirtingai nuo vaizdų atvejo, čia \textit{dropout} pridėjimas reikšmingai su
     \label{tab:ts_opt}
     \begin{tabular}{|l|c|c|c|c|}
         \hline
-        \textbf{Optimizatorius} & \textbf{val\_acc} & \textbf{test\_acc} & \textbf{val\_loss} & \textbf{test\_loss}\\
+        \textbf{Optimizatorius} & \textbf{train\_acc} & \textbf{val\_acc} & \textbf{train\_loss} & \textbf{val\_loss}\\
         \hline
-        Adam     & 0{,}9400 & 0{,}8600 & 1{,}2666 & 0{,}8862\\
+        Adam     & 1{,}0000 & 0{,}9400 & 0{,}0003 & 1{,}2666\\
         \hline
-        SGD      & 0{,}8867 & 0{,}8200 & 0{,}8219 & 0{,}7820\\
+        SGD      & 0{,}9550 & 0{,}8867 & 0{,}1972 & 0{,}8219\\
         \hline
-        RMSprop  & 0{,}9333 & 0{,}8800 & 1{,}2656 & 1{,}0788\\
+        RMSprop  & 1{,}0000 & 0{,}9333 & 1$\cdot 10^{-5}$ & 1{,}2656\\
         \hline
-        AdamW    & 0{,}9400 & 0{,}8400 & 1{,}2520 & 0{,}9137\\
+        AdamW    & 1{,}0000 & 0{,}9400 & 0{,}0003 & 1{,}2520\\
         \hline
     \end{tabular}
 \end{table}
 
-Visi adaptaciniai optimizatoriai duoda panašų testavimo tikslumą (\(84\)--\(88~\%\)), o SGD vėl atsilieka. RMSprop pasiekia geriausią mokymo paklaidą (\(\approx 0\)) ir kartu didžiausią mokymo aibės tikslumą, todėl pagal užduoties 4-ąjį punktą būtent šis modelis pasirenkamas kaip ,,geriausias“ testavimui (žr.~\ref{sec:geriausias} skyrių).
+Visi adaptaciniai optimizatoriai duoda panašų validavimo tikslumą (\(93\)--\(94~\%\)), o SGD vėl atsilieka tiek mokymo, tiek validavimo aibėse. RMSprop pasiekia mažiausią mokymo paklaidą (\(\approx 10^{-5}\)) ir kartu didžiausią mokymo aibės tikslumą, todėl pagal užduoties 4-ąjį punktą būtent šis modelis pasirenkamas kaip ,,geriausias“ testavimui (žr.~\ref{sec:geriausias} skyrių).
 
 
 \section{Geriausių modelių vertinimas}\label{sec:geriausias}
@@ -723,7 +682,7 @@ Painiavos matrica (\(30 \times 30\)) yra labai retareikšmė -- dauguma klaidų 
 
 \subsubsection{Apie 30 testavimo pavyzdžių}
 
-Iš testavimo aibės parinkta po vieną įrašą iš kiekvienos iš \(30\) klasių. \ref{tab:ts_samples}~lentelėje parodytos tikros ir prognozuotos klasės; iš \(30\) pavyzdžių \(28\) klasifikuoti teisingai, \(2\) -- klaidingai (\texttt{s003} \(\rightarrow\) \texttt{s004}, \texttt{s007} \(\rightarrow\) \texttt{s015}). Tai duoda \(\sim 93~\%\) tikslumą šio mažo poaibio.
+Iš testavimo aibės parinkta po vieną įrašą iš kiekvienos iš \(30\) klasių. Lentelėje~\ref{tab:ts_samples} parodytos tikros ir prognozuotos klasės; iš \(30\) pavyzdžių \(28\) klasifikuoti teisingai, \(2\) -- klaidingai (\texttt{s003} \(\rightarrow\) \texttt{s004}, \texttt{s007} \(\rightarrow\) \texttt{s015}). Tai duoda \(\sim 93~\%\) tikslumą šio mažo poaibio.
 
 \begin{table}[H]
     \centering
