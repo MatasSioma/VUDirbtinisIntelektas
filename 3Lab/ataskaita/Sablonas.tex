@@ -159,7 +159,7 @@ y = np.asarray(y, dtype=np.int64)
 
 \subsection{Laiko eilučių paruošimas}
 
-CMU duomenys įkraunami iš CSV failo (\texttt{pandas.read\_csv}). Atfiltruojami pirmieji 30 dalyvių ir tik pirmoji sesija. Duomenys saugomi dvimačio masyvo pavidalu \((N, 31)\), kuriame eilutė atitinka vieną slaptažodžio surinkimą.
+Duomenys įkraunami iš CSV failo (\texttt{pandas.read\_csv}). Atfiltruojami pirmieji 30 dalyvių ir tik pirmoji sesija. Duomenys saugomi dvimačio masyvo pavidalu \((N, 31)\), kuriame eilutė atitinka vieną slaptažodžio surinkimą.
 
 \texttt{Conv1D} sluoksniui reikia \((N, L, C)\) tensoriaus formato, kur \(L\) --- sekos ilgis, o \(C\) --- kanalų skaičius, todėl pridedama tuščia kanalų ašis (\texttt{X[..., np.newaxis]}). Galutinė įvesties forma --- \((N, 31, 1)\). Kadangi skirtingi laiko požymiai turi skirtingą skalę, atliekamas standartizavimas (vidurkis 0, standartinis nuokrypis 1). Standartizavimo statistikos (\(\mu, \sigma\)) skaičiuojamos tik iš mokymo aibės ir tada taikomos validavimo bei testavimo aibėms.
 
@@ -285,7 +285,7 @@ Programa suskirstyta į du modulius: \texttt{main.py} vaizdų klasifikavimui (Co
 
 \subsection{Modelio konstravimas pagal konfigūraciją}
 
-Funkcija \texttt{build\_model} paima žodyną \texttt{cfg}, kuris aprašo blokų sąrašą, tankius sluoksnius, optimizatorių, dropout tikimybes ir kt. Tai leidžia tarp eksperimentų keisti tinklo struktūrą be dubliavimo. Sutrumpintas pavyzdys:
+Funkcija \texttt{build\_model} paima \texttt{cfg} nustatymų rinkinį, kuris aprašo blokų sąrašą, tankius sluoksnius, optimizatorių, dropout tikimybes ir kt. Tai leidžia tarp eksperimentų keisti tinklo struktūrą. Sutrumpintas pavyzdys:
 
 \begin{verbatim}
 def build_model(cfg, input_shape, num_classes):
@@ -456,14 +456,14 @@ ReLU pasiekia geriausią validavimo tikslumą. Leaky ReLU ir tanh --- nedaug pra
         \hline
         SGD      & 0{,}9903 & 0{,}9909 & 0{,}0287 & 0{,}0345\\
         \hline
-        RMSprop  & 1{,}0000 & 0{,}9817 & \(\approx 0\) & 0{,}0473\\
+        RMSprop  & 1{,}0000 & 0{,}9817 & 1$\cdot 10^{-5}$ & 0{,}0473\\
         \hline
         AdamW    & 1{,}0000 & 1{,}0000 & 3$\cdot 10^{-5}$ & 0{,}0035\\
         \hline
     \end{tabular}
 \end{table}
 
-Mokymosi greičio optimizatoriai (Adam, RMSprop, AdamW) duoda labai panašius rezultatus, visi pasiekia tobulą arba beveik tobulą validavimo tikslumą. SGD su tuo pačiu mokymosi greičiu \(\eta = 10^{-3}\) ir \texttt{momentum} = 0{,}9 yra šiek tiek per lėtas konverguoti per 20 epochų, todėl jo mokymo tikslumas atsilieka (\(0{,}9903\)). \texttt{ChatGPT}.
+Mokymosi greičio optimizatoriai (Adam, RMSprop, AdamW) duoda labai panašius rezultatus, visi pasiekia tobulą arba beveik tobulą validavimo tikslumą. SGD su tuo pačiu mokymosi greičiu \(\eta = 10^{-3}\) ir \texttt{momentum} = 0{,}9 yra šiek tiek per lėtas konverguoti per 20 epochų, todėl jo mokymo tikslumas atsilieka (\(0{,}9903\)).
 
 \subsection{Laiko eilučių klasifikavimo eksperimentai}
 
@@ -614,11 +614,11 @@ Visi optimizatoriai duoda panašų validavimo tikslumą (\(93\)--\(94~\%\)), o S
 
 \section{Geriausių modelių vertinimas}\label{sec:geriausias}
 
-Geriausiu laikomas tas eksperimentas, kuriame mokymo aibei pasiekiamas didžiausias tikslumas ir mažiausia paklaida. Abiejuose uždaviniuose tokiu pasirodė \texttt{opt\_rmsprop} eksperimentas. Toliau šie modeliai įvertinami testavimo aibėje.
+Geriausiu laikomas tas eksperimentas, kuriame mokymo aibei pasiekiamas didžiausias tikslumas ir mažiausia paklaida. Abiejuose uždaviniuose tokiu pasirodė keičiant optimizatorių į \texttt{RMSprop}. Toliau šie modeliai įvertinami testavimo aibėje.
 
 \subsection{Vaizdų geriausias modelis}
 
-Geriausio vaizdų modelio (\texttt{opt\_rmsprop}) charakteristikos:
+Geriausio vaizdų modelio su \texttt{RMSprop} charakteristikos:
 \begin{itemize}
     \item Mokymo tikslumas: \(1{,}0000\), mokymo paklaida: \(\approx 0\);
     \item Validavimo tikslumas: \(1{,}0000\), validavimo paklaida: \(0{,}0473\);
@@ -647,7 +647,7 @@ Iš testavimo aibės atrinkta po 10 pavyzdžių iš kiekvienos klasės, iš viso
 
 \subsection{Laiko eilučių geriausias modelis}
 
-Geriausio laiko eilučių modelio (\texttt{opt\_rmsprop}) charakteristikos:
+Geriausio laiko eilučių modelio su \texttt{RMSprop} charakteristikos:
 \begin{itemize}
     \item Mokymo tikslumas: \(1{,}0000\), mokymo paklaida: \(\approx 10^{-5}\);
     \item Validavimo tikslumas: \(0{,}9333\), validavimo paklaida: \(1{,}2656\);
@@ -711,7 +711,7 @@ Iš testavimo aibės parinktas vienas įrašas iš kiekvienos iš \(30\) klasių
 
 \sectionnonum{Išvados}
 
-Konvoliuciniai neuroniniai tinklai sėkmingai pritaikyti abiem skirtingo tipo uždaviniams: vaizdų klasifikavimui (3 klasės) ir biometrinių laiko eilučių klasifikavimui (30 klasių). Iš trijų lygintų architektūrų \texttt{arch\_medium} (3 konvoliuciniai blokai, vienas tankus sluoksnis) pasižymėjo geriausiai abiems uždaviniams, gilesnis tinklas papildomos naudos neduoda, o paprastesnis tampa nestabilus. Vaizdų uždavinyje stiprus \textit{dropout} (\(p = 0{,}5\)) blogina rezultatus, nes modelis nepatiria didelio persimokymo, o laiko eilučių uždavinyje \textit{dropout} (\(p \in \{0{,}25;\ 0{,}5\}\)) reikšmingai sumažina paklaidą ir padidina testavimo tikslumą iki \(\sim 91~\%\). Paketų normalizavimas labiausiai naudingas laiko eilutėms (testavimo tikslumas padidėjo nuo \(86~\%\) iki \(93{,}33~\%\), o paklaida sumažėjo nuo \(0{,}886\) iki \(0{,}210\)), vaizdams paklaidą sumažino, bet tikslumo praktiškai nepakeitė. Aktyvacijos funkcijos turi mažesnę įtaką: ReLU, Leaky ReLU ir tanh duoda panašų vaizdų tikslumą, tuo tarpu, laiko eilutėms tanh sumažino paklaidą. Optimizatoriai (Adam, RMSprop, AdamW) duoda panašius rezultatus, o SGD su \(\eta = 10^{-3}\). Didžiausias mokymo tikslumas (\(1{,}0000\)) ir mažiausia mokymo paklaida (\(\approx 0\) vaizdams, \(\approx 10^{-5}\) laiko eilutėms) gauti su \texttt{opt\_rmsprop} konfigūracija abiem uždaviniams, todėl būtent ji parinkta galutiniam vertinimui testavimo aibėje. Geriausio vaizdų modelio testavimo tikslumas --- \(98{,}17~\%\) (paklaida \(0{,}142\)), visi keturi klaidingi atvejai yra klasės \texttt{paper} prognozavimas kaip \texttt{rock}/\texttt{scissors}, \texttt{rock} ir \texttt{scissors} atpažintos be klaidų. Geriausio laiko eilučių modelio testavimo tikslumas --- \(88{,}00~\%\) (paklaida \(1{,}079\)), o \texttt{confusion matrix} rodo jog klaidos pavienės ir pasiskirsčiusios. Iš 30 atrinktų testavimo pavyzdžių vaizdams visi (\(30/30\)) klasifikuoti teisingai, o laiko eilutėms --- \(28/30\). Bendras darbo rezultatas patvirtina, kad parametrizuotas CNN karkasas su nedidele paketų normalizavimo ir \textit{dropout} panaudojimu yra paprastas ir efektyvus sprendimas tiek vaizdo, tiek laiko eilučių klasifikacijos uždaviniams.
+Konvoliuciniai neuroniniai tinklai sėkmingai pritaikyti abiem skirtingo tipo uždaviniams: vaizdų klasifikavimui (3 klasės) ir biometrinių laiko eilučių klasifikavimui (30 klasių). Iš trijų lygintų architektūrų \texttt{arch\_medium} (3 konvoliuciniai blokai, vienas tankus sluoksnis) pasižymėjo geriausiai abiems uždaviniams, gilesnis tinklas papildomos naudos neduoda, o paprastesnis tampa nestabilus. Vaizdų uždavinyje stiprus \textit{dropout} (\(p = 0{,}5\)) blogina rezultatus, nes modelis nepatiria didelio persimokymo, o laiko eilučių uždavinyje \textit{dropout} (\(p \in \{0{,}25;\ 0{,}5\}\)) reikšmingai sumažina paklaidą ir padidina testavimo tikslumą iki \(\sim 91~\%\). Paketų normalizavimas labiausiai naudingas laiko eilutėms (testavimo tikslumas padidėjo nuo \(86~\%\) iki \(93{,}33~\%\), o paklaida sumažėjo nuo \(0{,}886\) iki \(0{,}210\)), vaizdams paklaidą sumažino, bet tikslumo praktiškai nepakeitė. Aktyvacijos funkcijos turi mažesnę įtaką: ReLU, Leaky ReLU ir tanh duoda panašų vaizdų tikslumą, tuo tarpu, laiko eilutėms tanh sumažino paklaidą. Optimizatoriai (Adam, RMSprop, AdamW) duoda panašius rezultatus, o SGD su \(\eta = 10^{-3}\). Didžiausias mokymo tikslumas (\(1{,}0000\)) ir mažiausia mokymo paklaida (\(\approx 0\) vaizdams, \(\approx 10^{-5}\) laiko eilutėms) gauti su \texttt{RMSprop} konfigūracija abiem uždaviniams, todėl būtent ji parinkta galutiniam vertinimui testavimo aibėje. Geriausio vaizdų modelio testavimo tikslumas --- \(98{,}17~\%\) (paklaida \(0{,}142\)), visi keturi klaidingi atvejai yra klasės \texttt{paper} prognozavimas kaip \texttt{rock}/\texttt{scissors}, \texttt{rock} ir \texttt{scissors} atpažintos be klaidų. Geriausio laiko eilučių modelio testavimo tikslumas --- \(88{,}00~\%\) (paklaida \(1{,}079\)), o \texttt{confusion matrix} rodo jog klaidos pavienės ir pasiskirsčiusios. Iš 30 atrinktų testavimo pavyzdžių vaizdams visi (\(30/30\)) klasifikuoti teisingai, o laiko eilutėms --- \(28/30\). Bendras darbo rezultatas patvirtina, kad parametrizuotas CNN karkasas su nedidele paketų normalizavimo ir \textit{dropout} panaudojimu yra paprastas ir efektyvus sprendimas tiek vaizdo, tiek laiko eilučių klasifikacijos uždaviniams.
 
 
 \printbibliography[title = {Literatūra ir šaltiniai}]
